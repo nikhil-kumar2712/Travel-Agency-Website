@@ -1,21 +1,6 @@
-.image {
-    
-    padding-top:200px;
-    height: 250px;
-    width: 100%;
-    position: absolute;
-    z-index: -1;
-
-}
-
-
-
-div.scroll-container {
-  background-color: #333;
-  overflow: auto;
-  white-space: nowrap;
-}
-
-div.scroll-container img {
-    padding-top:200px;
+.scroll-container {
+  padding-top:150px;
+  max-width: 100%;
+  position: relative;
+  margin: auto;
 }
