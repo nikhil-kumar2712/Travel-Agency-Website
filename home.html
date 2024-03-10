@@ -15,12 +15,12 @@
        <nav role="navigation">
         <div id="menuToggle">
           <input type="checkbox" />
-          <span></span>
-          <span></span>
-          <span></span>
+          <span class = "menuTogglesign"></span>
+          <span class = "menuTogglesign"></span>
+          <span class = "menuTogglesign"></span>
           <ul id="menu">
             <a href="#"><li>Login</li></a>
-            <a href="#"><li>Sign up</li></a>
+            <a ><li ><span onclick="document.getElementById('id01').style.display='block'" ;>Sign Up</span></li></a>
             <a href="places.html"><li>Places</li></a>
             <a href="#"><li>About</li></a>
             <a href="contact.html"><li>Contact Us</li></a>
@@ -50,10 +50,49 @@
         <img src="5.jpeg" style="height: 400px; width: 100%;">
       </div>
     </div>
-    <script src="script.js"></script>
-    <br>
-    <footer>Made with &hearts;by Vtravellers<br>
-      &#169; 2024-&infintie;
-    </footer>
+    <!-- Button to open the modal -->
+
+<!-- The Modal (contains the Sign Up form) -->
+<div id="id01" class="modal">
+  <span onclick="document.getElementById('id01').style.display='none'" class="close">x</span>
+  <form class="modal-content">
+    <div class="contain">
+      <h1>Sign Up</h1>
+      <p>Please fill in this form to create an account.</p>
+      <hr>
+      <label for="email"><b>Email</b></label>
+      <input type="text" placeholder="Enter Email" name="email" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>
+
+      <label for="psw-repeat"><b>Repeat Password</b></label>
+      <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+
+      <label>
+        <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+      </label>
+
+      <p>Do you agree ?? <a href="#" style="color:dodgerblue">Terms & Conditions</a>.</p>
+      <label for="Yes">
+        <input type="checkbox" value="Yes" name="Yes">Yes
+      </label>
+      <br>
+      <label for="No">
+        <input type="checkbox" value="No" name="No">No
+      </label>
+      <br>
+      <div class="clearfix">
+        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+        <button type="submit" class="signup">Sign Up</button>
+      </div>
+    </div>
+  </form>
+</div>
+  <script src="script.js"></script>
+  <br>
+  <footer>Made with &hearts;by Vtravellers<br>
+    &#169; 2024-&infintie;
+  </footer>
 </body>
 </html>

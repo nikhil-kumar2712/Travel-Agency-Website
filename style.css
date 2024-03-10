@@ -1,4 +1,4 @@
-body { /* Hide vertical scrollbar */
+body { 
   overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
@@ -184,6 +184,12 @@ input[type=submit]:hover {
   border-radius: 10px;
 }
 
+
+sign{
+  width:100px ;
+  font-size: 22px;
+}
+
 #menuToggle
 {
   position:relative;
@@ -219,7 +225,7 @@ input[type=submit]:hover {
   z-index: 2; /* and place it over the hamburger */
   -webkit-touch-callout: none;
 }
-#menuToggle span
+.menuTogglesign
 {
   display: block;
   width: 33px;
