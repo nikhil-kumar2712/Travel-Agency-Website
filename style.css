@@ -295,3 +295,37 @@ sign{
 {
   transform: none;
 }
+
+.body{
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.box { 
+  border: 2px solid black;
+  display: block;
+  height: 200px;
+  width:20%;
+}
+
+.Places-section{
+  background-image: cover;
+  display:flex;
+  margin-top: 5%;
+  justify-content: space-evenly; 
+}
+
+.Places-section-1{
+  display:flex;
+  margin-top: 5%;
+  justify-content: space-evenly;
+}
+
+.Places-section-2{
+  display: flex;
+  margin-top: 5%;
+  justify-content: space-evenly;
+}
