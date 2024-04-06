@@ -185,7 +185,7 @@ input[type=submit]:hover {
 }
 
 
-sign{
+.signup{
   width:100px ;
   font-size: 22px;
 }
@@ -309,10 +309,12 @@ sign{
   display: block;
   height: 200px;
   width:20%;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px 0 whitesmoke, 0 6px 20px 0 whitesmoke;
+  text-align: center;
 }
 
 .Places-section{
-  background-image: cover;
   display:flex;
   margin-top: 5%;
   justify-content: space-evenly; 
