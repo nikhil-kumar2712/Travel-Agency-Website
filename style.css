@@ -46,10 +46,42 @@ footer{
 }
 
 .footer{
-  background-image: url('building image.jpeg');
+  background-image: url('back.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+}
+
+.Box-container{
+  display: grid;
+  grid-template-columns:320px 420px 450px auto;
+}
+
+
+.bottom h3{
+  color: white;
+  font-size: 1.5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 4rem;
+}
+
+.bottom a{
+  color: rgb(255, 255, 255);
+  font-size: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 4rem;
+  padding-right: 1rem;
+  display: block;
+}
+
+.bottom a i{
+  color: rgb(10, 2, 255);
+  transition: 0.2s linear;
+}
+
+.bottom a:hover i{
+  padding-right: 1rem;
 }
   
 #content{
