@@ -3,11 +3,10 @@ body {
 }
 
 .scroll-container {
-  padding-top:150px;
+  padding-top:20px;
   background-size: cover;
   position: relative;
   margin: auto;
-  height: 600px;
 }
 
 *{
@@ -20,14 +19,12 @@ header{
 }
 
 #navbar{
-  height: 45px;
-  padding-top: 5px;
+  height: 55px;
 }
   
 #logo{
-  margin-left: 30px;
-  color:green;
-  font-size: 25px;
+  color:rgb(166, 0, 255);
+  font-size: 30px;
 }
 
 #a{
@@ -371,23 +368,32 @@ footer{
 }
 
 .box-container{
+  padding-left:5rem;
   display: grid;
-  grid-template-columns: 200px 200px 200px 200px 200px 200px;
-  gap: 5rem;
+  grid-template-columns: 150px 150px 150px 150px 150px 150px;
+  gap: 6rem;
 }
 
 .service-box{
-  padding:3rem 2rem;
+  padding:1rem 1rem;
   text-align: center;
   background-color: rgb(220, 125, 220);
 }
 
 .service-box img{
-  height: 7rem;
+  height: 5rem;
 }
 
 .service-box h3{
   color: rgb(255, 255, 255);
-  font-size: 1.7rem;
-  padding-top: 1rem
+  font-size: 1.2rem;
+}
+
+.button{
+  padding:10px;
+  padding-left:70px;
+  border: 1px solid rgb(93, 3, 44);
+  margin-left:650px;
+  margin-right:650px;
+  background-color:rgb(220, 125, 220);
 }
