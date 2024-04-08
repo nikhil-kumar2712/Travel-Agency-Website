@@ -44,6 +44,13 @@ footer{
   color:white;
   text-align: center;
 }
+
+.footer{
+  background-image: url('building image.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
   
 #content{
   height: 700px;
@@ -171,16 +178,15 @@ input[type=submit]:hover {
 }
 
 ::-webkit-scrollbar{
-  width: 14px;
+  width: 10px;
 }
-
 ::-webkit-scrollbar-track{
   background-color: #ffffff;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb{
-  background-color: #1c07079b;
+  background-color: #3ec0e79b;
   border-radius: 10px;
 }
 
@@ -331,3 +337,4 @@ input[type=submit]:hover {
   margin-top: 5%;
   justify-content: space-evenly;
 }
+
