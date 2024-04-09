@@ -2,11 +2,46 @@ body {
   overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
-.scroll-container {
+.mySlides {
   padding-top:20px;
-  background-size: cover;
-  position: relative;
-  margin: auto;
+  text-align: center;
+  height: 500px;
+  background-size: 1600px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.mySlides .content{
+  padding-left: 200px;
+  padding-top: 6rem;
+  width: 85rem;
+}
+
+.mySlides .content span{
+  display : block;
+  font-size : 3rem;
+  color: white;
+  text-shadow: 2px 2px #000;
+}
+
+.mySlides .content h3{
+  font-size : 5rem;
+  color: white;
+  text-transform :uppercase;
+  line-height: 1;
+  text-shadow: 2px 2px #000;
+  padding-bottom: 2rem;
+}
+
+.btn {
+  display: inline-block;
+  background: #000;
+  color:#ccc;
+  font-size: 1.5rem;
+  padding: 1rem 3rem;
+  cursor: pointer;
+  text-decoration: none;
+  margin-right: 0px;
 }
 
 *{
