@@ -341,7 +341,7 @@ input[type=submit]:hover {
 
 .Places-section{
   display:flex;
-  margin-top: 5%;
+  margin-top: 3%;
   justify-content: space-evenly; 
 }
 
