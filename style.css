@@ -84,7 +84,7 @@ h1{
 }
 
 /* Style inputs */
-input[type=text], select, textarea {
+input[type=text], select, textarea ,input[type=password]{
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -103,7 +103,15 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-  background-color: #45a049;
+  background-color: #fa9200;
+}
+
+.clearfix button[type=submit]{
+  color: rgb(4, 4, 4);
+  padding: 6px;
+  border-block-color: rgb(4, 4, 4);
+  cursor: pointer;
+  margin-left:250px;
 }
 
 /* Style the container/contact section */
@@ -155,8 +163,7 @@ input[type=submit]:hover {
     margin-top: 0;
   }
 }
-/*login form
-/* The Modal (background) */
+
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -171,25 +178,24 @@ input[type=submit]:hover {
   padding-top: 60px;
 }
 
-/* Modal Content/Box */
 .modal-content {
-  margin: 5px auto; /* 15% from the top and centered */
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  position: fixed;
+  left: 455px;
+  margin: 115px auto;
+  width: 40%; 
+  opacity: 0.7;
 }
 
-/* The Close Button */
 .close {
-  /* Position it in the top right corner outside of the modal */
+  z-index: 1;
   position: absolute;
-  right: 25px;
-  top: 0;
+  right: 470px;
+  margin-top: 110px;
   color: #000;
   font-size: 35px;
   font-weight: bold;
 }
 
-/* Close button on hover */
 .close:hover,
 .close:focus {
   color: red;
