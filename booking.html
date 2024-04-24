@@ -8,8 +8,7 @@
     <style>
         body {
         background-image: url('building image.jpeg');
-        background-size: cover;
-        height: 600px;
+        background-size: 1600px 1400px;
       }
     </style>
 </head>
@@ -20,35 +19,63 @@
            <a id="logo">Vtravellers.in</a>
         </div>
     </header>
-        <form action="#">
-        <div>
-        <p>Your Name</p>
-        <input type="text" placeholder="Your Name" required>
+    <div class="container">
+        <div style="text-align:center">
+          <h2>Book Now</h2>
+          <p>Fill up this form to get your customized travel package and get exciting offers.</p>
         </div>
-        <div>
-        <p>Your email</p>
-        <input type="email" placeholder="Your email"required>
+        <div class="row">
+          <div class="column">
+            <form>
+              <label for="fname">First Name</label>
+              <input type="text" id="fname" name="firstname" placeholder="Enter Your first name.." required>
+              <label for="lname">Last Name</label>
+              <input type="text" id="lname" name="lastname" placeholder="Enter Your last name..">
+              <label for="tno">Number of travellers</label>
+              <select id="tno" name="tno" required>
+                <option value="1">One person</option>
+                <option value="2">Two persons</option>
+                <option value="3">Three persons</option>
+                <option value="4">Four persons</option>
+                <option value="5">Five persons</option>
+              </select>
+              <label for="destination">Destinations</label>
+              <select id="destination" name="destination" required>
+                <option value="Agra">Agra</option>
+                <option value="Pune">Pune</option>
+                <option value="New Delhi">New Delhi</option>
+                <option value="Somnath">Somnath</option>
+                <option value="Goa">Goa</option>
+                <option value="Kerela">Kerela</option>
+                <option value="Srinagar">Srinagar</option>
+                <option value="Jaipur">Jaipur</option>
+                <option value="Ayodhya">Ayodhya</option>
+              </select>
+              <label for="pickup">Pickup Point</label>
+              <textarea id="pickup" name="pickup" placeholder="Enter your pickup address.. "required style="height:100px"></textarea>
+              <label for="drop">Dropping Point</label>
+              <textarea id="drop" name="drop" placeholder="Enter your drop location.. "required style="height:100px"></textarea>
+              <label for="travel">Mode of Travelling</label>
+              <select id="travel" name="travel">
+                <option value="Air">By Air</option>
+                <option value="Train">By Train</option>
+                <option value="Road">BY Road</option>
+              </select>
+              <label for="cno">Contact Number</label>
+              <input type="number" id="cno" name="cno" placeholder="Your name.." required>
+              <label for="email">Email</label>
+              <input type="text" id ="email" name="email" placeholder="Enter your Email.." required>
+              <label for="ano">Adhar Card Number</label>
+              <input type="number" id="ano" name="ano" placeholder="Enter your adhar card number.." required>
+              <label for="ldate">Leaving On</label>
+              <input type="date" id ="ldate" name="ldate" required>
+              <label for="rdate">Returning On</label>
+              <input type="date" id ="rdate" name="rdate" required>
+              <input type="submit" value="Submit">
+            </form>
+          </div>
         </div>
-        <div>
-        <p>Date</p>
-        <input type="date">
-        </div>
-        <div>
-        <p>Time</p>
-        <input type="time">
-        </div>
-        <div>
-        <p>How many people?</p>
-        <select name="select" id="#">
-        <option value="1">1 person </option>
-        <option value="2">2 persons</option>
-        <option value="3">3 persosn</option>
-        <option value="4">4 persons</option>
-        <option value="5">5 persons</option>
-        <option value="5+">5+ persons</option>
-        </select>
-        </div>
-        <button>Submit</button>
+    </div>
         <footer>Made with &hearts;by Vtravellers<br>
             &#169; 2024-&infintie;
         </footer>
