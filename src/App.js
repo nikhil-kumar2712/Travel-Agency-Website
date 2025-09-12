@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./style.css";
 import "font-awesome/css/font-awesome.min.css";
+import Slides from "./slides"; // import the carousel
 
 function App() {
   const [showSignUp, setShowSignUp] = useState(false);
@@ -37,19 +38,13 @@ function App() {
       </header>
 
       {/* Hero Slides */}
-      {["fpage1.jpg", "fpage2.jpg", "fpage3.jpg", "fpage4.jpg", "fpage5.jpg"].map((img, i) => (
-        <div key={i} className="mySlides" style={{ backgroundImage: `url(${img})` }}>
-          <div className="content">
-            <span> Explore , Discover , Travel </span>
-            <h3> Travel around the world </h3>
-            <a href="places.html" className="btn"> Discover More </a>
-          </div>
-        </div>
-      ))}
+      <div className="App">
+        <Slides />
+      </div>
 
       {/* Services Section */}
       <section className="sevices">
-        <h1 style={{ paddingLeft: "695px", paddingBottom: "3rem", fontSize: "1.5rem" }}>
+        <h1 style={{ paddingTop: "5%", paddingLeft: "695px", paddingBottom: "3rem", fontSize: "1.5rem" }}>
           Our Services
         </h1>
         <div className="box-container">
