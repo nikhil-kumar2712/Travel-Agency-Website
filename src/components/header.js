@@ -20,10 +20,10 @@ function Header({ setShowSignIn, setShowSignUp }) {
             <ul id="menu">
               <li><span onClick={() => setShowSignIn(true)}>Sign In</span></li>
               <li><span onClick={() => setShowSignUp(true)}>Sign Up</span></li>
-              <li><a href="places.html">Places</a></li>
-              <li><a href="booking.html">Booking</a></li>
-              <li><a href="#">About</a></li>
-              <li><a href="contact.html">Contact Us</a></li>
+              <li><a href="/places">Places</a></li>
+              <li><a href="/booking">Booking</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/contact">Contact Us</a></li>
             </ul>
           </div>
         </nav>
