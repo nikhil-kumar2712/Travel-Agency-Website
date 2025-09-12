@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import "../style.css";
 
-import fpage1 from "./assets/fpage1.jpg";
-import fpage2 from "./assets/fpage2.jpg";
-import fpage3 from "./assets/fpage3.jpg";
-import fpage4 from "./assets/fpage4.jpg";
-import fpage5 from "./assets/fpage5.jpg";
-
-const slides = [fpage1, fpage2, fpage3, fpage4, fpage5];
+const slides = [
+  "/assets/fpage1.jpg",
+  "/assets/fpage2.jpg",
+  "/assets/fpage3.jpg",
+  "/assets/fpage4.jpg",
+  "/assets/fpage5.jpg",
+];
 
 export default function HeroSlides() {
   const [slideIndex, setSlideIndex] = useState(0);
@@ -37,7 +38,7 @@ export default function HeroSlides() {
       {slides.map((img, i) => (
         <div
           key={i}
-          className="mySlides"
+          className="mySlides fade"
           style={{
             display: i === slideIndex ? "block" : "none",
             backgroundImage: `url(${img})`,

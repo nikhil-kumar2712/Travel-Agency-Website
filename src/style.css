@@ -414,12 +414,13 @@ input[type=submit]:hover {
 }
 
 .footer{
+  padding-Top: 3%;
   background-position: center;
   background-attachment: fixed;
 }
 
 .Box-container{
-  background: url('./assets/back.jpg');
+  background: url('back.jpg');
   background-size: cover;
   display: grid;
   grid-template-columns:320px 420px 450px auto;
