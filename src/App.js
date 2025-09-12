@@ -3,47 +3,41 @@ import React, { useState } from "react";
 import "./style.css";
 import Header from "./components/header";
 import Footer from "./components/footer";
-import Slides from "./components/slides";
-import Services from "./components/services";
 import SignUp from "./components/signUp";
 import SignIn from "./components/signIn";
-
+import Home from "./pages/Home.js";
+import Places from "./pages/Places.js";
+import Booking from "./pages/Booking.js";
+import Contact from "./pages/Contact.js";
+import About from "./pages/About.js";
 
 function App() {
   const [showSignUp, setShowSignUp] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
 
   return (
-    <div>
-      <Header setShowSignUp={setShowSignUp} setShowSignIn={setShowSignIn} />
+    <Router>
+      <div>
+        <Header setShowSignUp={setShowSignUp} setShowSignIn={setShowSignIn} />
 
-      {/* Hero Slides */}
-      <Slides />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/places" element={<Places />} />
+          <Route path="/booking" element={<Booking />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
 
-      {/* Services Section */}
-      <Services />
+        {/* Sign Up Modal */}
+        {showSignUp && <SignUp onClose={() => setShowSignUp(false)} />}
 
-      {/* Quote */}
-      <p style={{ textAlign: "center", paddingTop: "3%" , paddingLeft: "100px", paddingRight: "100px", paddingBottom: "3rem", fontSize: "1.5rem" }}>
-        <i>
-          "Ready to embark on your next adventure? Escape to breathtaking destinations with unbeatable deals from <strong>Vtravellers</strong>. From sun-soaked beaches to cultural treasures, we've got your dream getaway covered. Book now and unlock a world of unforgettable experiences!"
-        </i>
-      </p>
+        {/* Sign In Modal */}
+        {showSignIn && <SignIn onClose={() => setShowSignIn(false)} />}
 
-      {/* Book Now Button */}
-      <div className="button">
-        <a href="booking.html" style={{ textDecoration: "none" , whiteSpace: "nowrap" }}>BOOK NOW</a>
+        {/* Footer */}
+        <Footer />
       </div>
-
-      {/* Sign Up Modal */}
-      {showSignUp && <SignUp onClose={() => setShowSignUp(false)} />}
-
-      {/* Sign In Modal */}
-      {showSignIn && <SignIn onClose={() => setShowSignIn(false)} />}
-
-      {/* Footer */}
-      <Footer />
-    </div>
+    </Router>
   );
 }
 

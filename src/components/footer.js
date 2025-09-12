@@ -9,16 +9,16 @@ function Footer() {
         <div className="Box-container">
           <div className="bottom">
             <h3>Quick Links</h3>
-            <a href="/"><i className="fa fa-angle-right"></i> Home </a>
-            <a href="places.html"><i className="fa fa-angle-right"></i> Places </a>
-            <a href="booking.html"><i className="fa fa-angle-right"></i> Booking </a>
+            <Link to="/"><i className="fa fa-angle-right"></i> Home </Link>
+            <Link to="/Places"><i className="fa fa-angle-right"></i> Places </Link>
+            <Link to="/Booking"><i className="fa fa-angle-right"></i> Booking </Link>
           </div>
           <div className="bottom">
             <h3>External Links</h3>
-            <a href="about.html"><i className="fa fa-angle-right"></i> About Us </a>
-            <a href="contact.html"><i className="fa fa-angle-right"></i> Contact Us </a>
-            <a href="#"><i className="fa fa-angle-right"></i> Privacy policy </a>
-            <a href="#"><i className="fa fa-angle-right"></i> Terms and Conditions </a>
+            <Link to="/About"><i className="fa fa-angle-right"></i> About Us </Link>
+            <Link to="/Contact"><i className="fa fa-angle-right"></i> Contact Us </Link>
+            <Link to="/"><i className="fa fa-angle-right"></i> Privacy policy </Link>
+            <Link to="/"><i className="fa fa-angle-right"></i> Terms and Conditions </Link>
           </div>
           <div className="bottom">
             <h3>Contact info</h3>
