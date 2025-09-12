@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import Header from "../components/header";
+import Footer from "../components/footer";
+import SignUp from "../components/signUp";
+import SignIn from "../components/signIn";
 import Slides from "../components/slides";
 import Services from "../components/services";
 
 function Home() {
+  const [showSignUp, setShowSignUp] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
+
   return (
-    <>
+    <div>
+    
+      <Header setShowSignUp={setShowSignUp} setShowSignIn={setShowSignIn} />
 
       {/* Hero Slides */}
       <Slides />
@@ -23,9 +32,18 @@ function Home() {
       <div className="button">
         <a href="/booking" style={{ textDecoration: "none" , whiteSpace: "nowrap" }}>BOOK NOW</a>
       </div>
+      
+      {/* Sign Up Modal */}
+      {showSignUp && <SignUp onClose={() => setShowSignUp(false)} />}
 
-      </>
-    );
+      {/* Sign In Modal */}
+      {showSignIn && <SignIn onClose={() => setShowSignIn(false)} />}
+
+      {/* Footer */}
+      <Footer />
+
+    </div>
+  );
 }
 
 export default Home;
