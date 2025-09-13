@@ -1,10 +1,11 @@
 import React from "react";
+import "../style.css";
 import "font-awesome/css/font-awesome.min.css";
 
 function Header({ setShowSignIn, setShowSignUp }) {
   return (
     <header>
-      <div id="navbar">
+      <div id="navbar"> 
         <img
           src="./assets/logo.png"
           alt="Logo"
@@ -18,8 +19,8 @@ function Header({ setShowSignIn, setShowSignUp }) {
             <span className="menuTogglesign"></span>
             <span className="menuTogglesign"></span>
             <ul id="menu">
-              <li><span style={{ cursor: "pointer" }} onClick={() => setShowSignIn(true)}>Sign In</span></li>
-              <li><span style={{ cursor: "pointer" }} onClick={() => setShowSignUp(true)}>Sign Up</span></li>
+              <li><a><span style={{cursor:'pointer',whiteSpace: "nowrap"}} onClick={() => setShowSignIn(true)}>Sign In</span></a></li>
+              <li><a><span style={{cursor:'pointer',whiteSpace: "nowrap"}} onClick={() => setShowSignUp(true)}>Sign Up</span></a></li>
               <li><a href="/places">Places</a></li>
               <li><a href="/booking">Booking</a></li>
               <li><a href="/about">About</a></li>
