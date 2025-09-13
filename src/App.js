@@ -6,6 +6,10 @@ import Places from "./pages/Places.js";
 import Booking from "./pages/Booking.js";
 import Contact from "./pages/Contact.js";
 import About from "./pages/About.js";
+import Pune from "./pages/pune.js";
+import Goa from "./pages/goa.js";
+import Ayodhya from "./pages/ayodhya.js";
+import Kerala from "./pages/kerala.js";
 
 function App() {
   return (
@@ -16,6 +20,10 @@ function App() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+          <Route path="/pune" element={<Pune />} />
+          <Route path="/goa" element={<Goa />} />
+          <Route path="/ayodhya" element={<Ayodhya />} />
+          <Route path="/kerala" element={<Kerala />} />
         </Routes>
     </Router>
   );
