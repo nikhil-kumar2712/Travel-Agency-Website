@@ -14,6 +14,10 @@ function Home() {
     <div>
     
       <Header setShowSignUp={setShowSignUp} setShowSignIn={setShowSignIn} />
+      {/* Sign Up Modal */}
+      {showSignUp && <SignUp onClose={() => setShowSignUp(false)} />}
+      {/* Sign In Modal */}
+      {showSignIn && <SignIn onClose={() => setShowSignIn(false)} />}
 
       {/* Hero Slides */}
       <Slides />
@@ -32,12 +36,6 @@ function Home() {
       <div className="button">
         <a href="/booking" style={{ textDecoration: "none" , whiteSpace: "nowrap" }}>BOOK NOW</a>
       </div>
-      
-      {/* Sign Up Modal */}
-      {showSignUp && <SignUp onClose={() => setShowSignUp(false)} />}
-
-      {/* Sign In Modal */}
-      {showSignIn && <SignIn onClose={() => setShowSignIn(false)} />}
 
       {/* Footer */}
       <Footer />

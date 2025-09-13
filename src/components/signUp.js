@@ -2,7 +2,7 @@ import React from "react";
 
 const SignUp = ({ onClose }) => {
   return (
-    <div id="id01" className="modal">
+    <div className="modal">
       <span onClick={onClose} className="close">x</span>
       <form className="modal-content">
         <div className="contain">
