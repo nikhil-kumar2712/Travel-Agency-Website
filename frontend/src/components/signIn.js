@@ -1,19 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 
 const SignIn = ({ onClose }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("http://localhost:5000/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("✅ Login successful!");
+        onClose();
+      } else {
+        alert(`❌ ${data.message}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Error connecting to server.");
+    }
+  };
+
   return (
     <div className="modal">
       <span onClick={onClose} className="close">x</span>
-      <form className="modal-content">
+      <form className="modal-content" onSubmit={handleSubmit}>
         <div className="contain">
           <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>Sign In</h1>
           <hr />
           
           <label><b>Email</b></label>
-          <input type="text" placeholder="Enter Email" required />
+          <input 
+            type="text" 
+            placeholder="Enter Email" 
+            required 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+          />
 
           <label><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" required />
+          <input 
+            type="password" 
+            placeholder="Enter Password" 
+            required 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+          />
 
           <label>
             <input type="checkbox" defaultChecked name="remember" style={{ marginBottom: "15px" }} /> Remember me
