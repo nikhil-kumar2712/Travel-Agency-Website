@@ -12,8 +12,9 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "yourpassword",
-  database: "yourdbname",
+  password: "Nikhil@1290",
+  database: "travel",
+  port: 3306
 });
 
 db.connect((err) => {
@@ -45,6 +46,29 @@ app.post("/signin", (req, res) => {
       }
 
       res.json({ message: "Login successful", user: { id: user.id, email: user.email } });
+    });
+  });
+});
+
+// ✅ API route for Sign Up
+app.post("/signup", (req, res) => {
+  const { email, password } = req.body;
+
+  // Hash the password
+  bcrypt.hash(password, 10, (err, hashedPassword) => {
+    if (err) return res.status(500).json({ error: "Error hashing password" });
+
+    // Insert into database
+    const query = "INSERT INTO users (email, password) VALUES (?, ?)";
+    db.query(query, [email, hashedPassword], (err, result) => {
+      if (err) {
+        if (err.code === "ER_DUP_ENTRY") {
+          return res.status(409).json({ error: "Email already exists" });
+        }
+        return res.status(500).json({ error: "Database error" });
+      }
+
+      res.json({ message: "Sign Up successful", userId: result.insertId });
     });
   });
 });
