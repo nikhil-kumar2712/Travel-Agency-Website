@@ -1,5 +1,6 @@
 import React from "react";
-import "../style.css"; // make sure your CSS is linked properly
+import "../style.css"; 
+import "../contact.css";
 
 function Contact() {
   return (
