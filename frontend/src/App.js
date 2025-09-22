@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import React from "react";
 import "./style.css";
 import Home from "./pages/Home.js";
 import Places from "./pages/Places.js";
@@ -10,6 +9,7 @@ import Pune from "./pages/pune.js";
 import Goa from "./pages/goa.js";
 import Ayodhya from "./pages/ayodhya.js";
 import Kerala from "./pages/kerala.js";
+import HomeAfterSignIn from "./pages/HomeAfterSignIn";
 
 function App() {
   return (
@@ -24,6 +24,7 @@ function App() {
           <Route path="/goa" element={<Goa />} />
           <Route path="/ayodhya" element={<Ayodhya />} />
           <Route path="/kerala" element={<Kerala />} />
+          <Route path="/homeaftersignin" element={<HomeAfterSignIn />} />
         </Routes>
     </Router>
   );

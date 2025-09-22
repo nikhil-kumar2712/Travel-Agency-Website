@@ -6,18 +6,24 @@ import SignIn from "../components/signIn";
 import Slides from "../components/slides";
 import Services from "../components/services";
 
-function Home() {
+console.log("Stored user:", localStorage.getItem("user"));
+
+function HomeAfterSignIn() {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [showSignUp, setShowSignUp] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
 
   return (
     <div>
-    
       <Header setShowSignUp={setShowSignUp} setShowSignIn={setShowSignIn} />
       {/* Sign Up Modal */}
       {showSignUp && <SignUp onClose={() => setShowSignUp(false)} />}
       {/* Sign In Modal */}
       {showSignIn && <SignIn onClose={() => setShowSignIn(false)} />}
+
+      <div>
+        <h1>Welcome, {user?.email}</h1>
+      </div>
 
       {/* Hero Slides */}
       <Slides />
@@ -44,4 +50,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomeAfterSignIn;

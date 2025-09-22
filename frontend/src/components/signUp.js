@@ -84,26 +84,26 @@ const SignUp = ({ onClose }) => {
           </p>
           <br />
 
-          <p>
-            Do you agree?? &nbsp;
-            <input 
-              type="radio" 
-              id="yes" 
-              name="agree" 
-              value="Yes" 
-              checked={agree === "Yes"} 
-              onChange={(e) => setAgree(e.target.value)} 
-            />
-            <label htmlFor="yes">Yes</label>
-            <input 
-              type="radio" 
-              id="no" 
-              name="agree" 
-              value="No" 
-              checked={agree === "No"} 
-              onChange={(e) => setAgree(e.target.value)} 
-            />
-            <label htmlFor="no">No</label>
+          <p style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          Do you agree??
+          <input 
+            type="radio" 
+            id="yes" 
+            name="agree" 
+            value="Yes" 
+            checked={agree === "Yes"} 
+            onChange={(e) => setAgree(e.target.value)} 
+          />
+          <label htmlFor="yes">Yes</label>
+          <input 
+            type="radio" 
+            id="no" 
+            name="agree" 
+            value="No" 
+            checked={agree === "No"} 
+            onChange={(e) => setAgree(e.target.value)} 
+          />
+          <label htmlFor="no">No</label>
           </p>
           <br />
 
