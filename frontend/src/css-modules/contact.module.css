@@ -1,0 +1,101 @@
+/* Base form styling */
+input[type=text], 
+select, 
+textarea,
+input[type=password],
+input[type=number],
+input[type=date] {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #ddd;
+  margin-top: 8px;
+  margin-bottom: 18px;
+  resize: vertical;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+input[type=text]:focus, 
+select:focus, 
+textarea:focus,
+input[type=password]:focus,
+input[type=number]:focus,
+input[type=date]:focus {
+  border-color: #04AA6D;
+  box-shadow: 0 0 8px rgba(4,170,109,0.3);
+  outline: none;
+}
+
+/* Submit button styling */
+input[type=submit] {
+  background: linear-gradient(135deg, #0478aaff, #02895B);
+  color: white;
+  padding: 14px 28px;
+  border: none;
+  cursor: pointer;
+  display: block;
+  margin: 25px auto 0 auto;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+input[type=submit]:hover {
+  background: linear-gradient(135deg, #fa9200, #f78200);
+}
+
+/* Container */
+.container {
+  border-radius: 10px;
+  padding: 40px;
+  background-color: rgba(255,255,255,0.9);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  margin-top: 50px;
+  margin-left: 22%;
+  max-width: 850px;
+}
+
+/* Column */
+.column {
+  width: 100%;
+  padding: 20px;
+  margin: auto;
+}
+
+/* Headings */
+.container h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.container p {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* Labels */
+label {
+  font-weight: 600;
+  color: #444;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  input[type=submit] {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
