@@ -1,6 +1,5 @@
 import React from "react";
-import "../style.css"; 
-import "../contact.css";
+import styles from "../css-modules/contact.module.css";
 
 function Contact() {
   return (
@@ -24,14 +23,14 @@ function Contact() {
       </header>
 
       {/* Contact Form Section */}
-      <div className="container">
+      <div className={styles.container}>
         <div style={{ textAlign: "center" }}>
           <h2>Contact Us</h2>
           <p>Need help! We are here for you.</p>
         </div>
 
-        <div className="row">
-          <div className="column">
+        <div className={styles.row}>
+          <div className={styles.column}>
             <form>
               <label htmlFor="fname">First Name</label>
               <input type="text" id="fname" name="firstname" placeholder="Enter Your first name.." required />

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import "../style.css"; 
-import "../booking.css";
+import styles from "../css-modules/booking.module.css";
 
 function Booking() {
   // State for form inputs
@@ -104,14 +103,14 @@ function Booking() {
       </header>
 
       {/* Form Section */}
-      <div className="container">
+      <div className={styles.container}>
         <div style={{ textAlign: "center" }}>
           <h2>Book Now</h2>
           <p>Fill up this form to get your customized travel package and get exciting offers.</p>
         </div>
 
-        <div className="row">
-          <div className="column">
+        <div className={styles.row}>
+          <div className={styles.column}>
             <form onSubmit={handleSubmit}>
               <label htmlFor="fname">First Name</label>
               <input
