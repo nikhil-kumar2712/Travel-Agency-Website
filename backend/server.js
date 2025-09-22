@@ -38,14 +38,14 @@ app.post("/signin", (req, res) => {
 
     const user = results[0];
 
-    // ✅ Compare hashed password
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) throw err;
       if (!isMatch) {
         return res.status(401).json({ error: "Invalid credentials" });
       }
 
-      res.json({ message: "Login successful", user: { id: user.id, email: user.email } });
+      // ✅ Send only user data
+      res.json({ id: user.id, email: user.email });
     });
   });
 });

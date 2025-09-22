@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // ✅
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,16 +20,19 @@ const SignIn = ({ onClose }) => {
 
       const data = await res.json();
       if (res.ok) {
-        alert("✅ Login successful!");
-        onClose();
+        // ✅ Store user info if needed
+        localStorage.setItem("user", JSON.stringify(data.user)); 
+        onClose(); // close modal if you want
+        navigate("/homeaftersignin"); // ✅ redirect to page
       } else {
-        alert(`❌ ${data.message}`);
+        alert(`❌ ${data.error || data.message}`);
       }
     } catch (err) {
       console.error(err);
       alert("⚠️ Error connecting to server.");
     }
   };
+
 
   return (
     <div className="modal">
