@@ -140,24 +140,39 @@ function Booking() {
                 <option value="5">Five persons</option>
               </select>
 
-              <label htmlFor="destination">Destinations (Hold Ctrl/Command for multiple)</label>
-              <select
-                id="destination"
-                name="destination"
-                multiple
-                required
-                onChange={handleChange}
-              >
-                <option value="Agra">Agra</option>
-                <option value="Pune">Pune</option>
-                <option value="New Delhi">New Delhi</option>
-                <option value="Somnath">Somnath</option>
-                <option value="Goa">Goa</option>
-                <option value="Kerela">Kerela</option>
-                <option value="Srinagar">Srinagar</option>
-                <option value="Jaipur">Jaipur</option>
-                <option value="Ayodhya">Ayodhya</option>
-              </select>
+              <label htmlFor="destination">Destinations</label>
+              <div className={styles.destinationsBox}>
+                {[
+                  "Agra",
+                  "Pune",
+                  "New Delhi",
+                  "Somnath",
+                  "Goa",
+                  "Kerela",
+                  "Srinagar",
+                  "Jaipur",
+                  "Ayodhya",
+                ].map((city) => (
+                  <label key={city} className={styles.destinationItem}>
+                    <input
+                      type="checkbox"
+                      name="destination"
+                      value={city}
+                      checked={formData.destination.includes(city)}
+                      onChange={(e) => {
+                        let updatedDest = [...formData.destination];
+                        if (e.target.checked) {
+                          updatedDest.push(city);
+                        } else {
+                          updatedDest = updatedDest.filter((item) => item !== city);
+                        }
+                        setFormData({ ...formData, destination: updatedDest });
+                      }}
+                    />
+                    {city}
+                  </label>
+                ))}
+              </div>
 
               <label htmlFor="pickup">Pickup Point</label>
               <textarea
@@ -230,17 +245,33 @@ function Booking() {
                 <option value="budget">Budget Stay</option>
               </select>
 
-              <label htmlFor="activities">Activities (Hold Ctrl/Command for multiple)</label>
-              <select
-                id="activities"
-                name="activities"
-                multiple
-                onChange={handleChange}
-              >
-                <option value="sightseeing">Sightseeing</option>
-                <option value="trekking">Trekking</option>
-                <option value="adventure">Adventure Sports</option>
-              </select>
+              <label htmlFor="activities">Activities</label>
+              <div className={styles.activitiesBox}>
+                {[
+                  { label: "Sightseeing", value: "sightseeing" },
+                  { label: "Trekking", value: "trekking" },
+                  { label: "Adventure Sports", value: "adventure" },
+                ].map((act) => (
+                  <label key={act.value} className={styles.activityItem}>
+                    <input
+                      type="checkbox"
+                      name="activities"
+                      value={act.value}
+                      checked={formData.activities.includes(act.value)}
+                      onChange={(e) => {
+                        let updatedAct = [...formData.activities];
+                        if (e.target.checked) {
+                          updatedAct.push(act.value);
+                        } else {
+                          updatedAct = updatedAct.filter((item) => item !== act.value);
+                        }
+                        setFormData({ ...formData, activities: updatedAct });
+                      }}
+                    />
+                    {act.label}
+                  </label>
+                ))}
+              </div>
 
               <label htmlFor="meals">Meal Plan</label>
               <select id="meals" name="meals" onChange={handleChange}>
@@ -258,18 +289,18 @@ function Booking() {
                 onChange={handleChange}
               />
 
-              <label htmlFor="uploadDocs">Upload Documents</label>
+              <label htmlFor="uploadDocs">Upload ID Proof</label>
               <input type="file" id="uploadDocs" name="uploadDocs" multiple onChange={handleChange} />
 
-              <div>
-                <input
-                  type="checkbox"
-                  id="callback"
-                  name="callback"
-                  onChange={handleChange}
-                />
-                <label htmlFor="callback"> Request a callback from our travel advisor</label>
-              </div>
+              <div className={styles.callbackBox}>
+              <input
+                type="checkbox"
+                id="callback"
+                name="callback"
+                onChange={handleChange}
+              />
+              <label htmlFor="callback">Request a callback from our travel advisor</label>
+            </div>
 
               {/* Dynamic Price */}
               <div style={{ marginTop: "20px", fontSize: "18px", fontWeight: "bold" }}>

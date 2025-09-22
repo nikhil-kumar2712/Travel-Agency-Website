@@ -123,3 +123,79 @@ input[type=file] {
     margin-top: 20px;
   }
 }
+
+/* Container for all the destination checkboxes */
+.destinationsBox {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 16px;
+  background-color: #f9f9f9;
+}
+
+/* Each checkbox + label */
+.destinationItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.destinationItem input[type="checkbox"] {
+  accent-color: #04AA6D; /* custom color for checkboxes */
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Container for all the activity checkboxes */
+.activitiesBox {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 16px;
+  background-color: #f9f9f9;
+}
+
+/* Each activity checkbox + label */
+.activityItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.activityItem input[type="checkbox"] {
+  accent-color: #04AA6D; /* custom checkbox color */
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.callbackBox {
+  display: flex;
+  align-items: center; /* vertical center */
+  gap: 8px;            /* space between checkbox and label */
+  margin: 10px 0;
+}
+
+.callbackBox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #04AA6D; /* green checkbox tick */
+  cursor: pointer;
+}
+
+.callbackBox label {
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
