@@ -1,20 +1,31 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import HeaderAfterSignIn from "../components/headeraftersignin";
 import Footer from "../components/footer";
 import Slides from "../components/slides";
 import Services from "../components/services";
 
-console.log("Stored user:", localStorage.getItem("user"));
-
 function HomeAfterSignIn() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // push a dummy state so back button triggers popstate
+    window.history.pushState(null, "", window.location.href);
+
+    const handleBack = () => {
+      // logout on back
+      localStorage.removeItem("user");
+      navigate("/", { replace: true });
+    };
+
+    window.addEventListener("popstate", handleBack);
+    return () => window.removeEventListener("popstate", handleBack);
+  }, [navigate]);
 
   return (
     <div>
       <HeaderAfterSignIn />
-
-      <div>
-        <h1>Welcome, {user?.uname}</h1>
-      </div>
 
       {/* Hero Slides */}
       <Slides />
