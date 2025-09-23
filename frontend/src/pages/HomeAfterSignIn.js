@@ -1,8 +1,5 @@
-import React, { useState } from "react";
-import Header from "../components/header";
+import HeaderAfterSignIn from "../components/headeraftersignin";
 import Footer from "../components/footer";
-import SignUp from "../components/signUp";
-import SignIn from "../components/signIn";
 import Slides from "../components/slides";
 import Services from "../components/services";
 
@@ -10,19 +7,13 @@ console.log("Stored user:", localStorage.getItem("user"));
 
 function HomeAfterSignIn() {
   const user = JSON.parse(localStorage.getItem("user"));
-  const [showSignUp, setShowSignUp] = useState(false);
-  const [showSignIn, setShowSignIn] = useState(false);
 
   return (
     <div>
-      <Header setShowSignUp={setShowSignUp} setShowSignIn={setShowSignIn} />
-      {/* Sign Up Modal */}
-      {showSignUp && <SignUp onClose={() => setShowSignUp(false)} />}
-      {/* Sign In Modal */}
-      {showSignIn && <SignIn onClose={() => setShowSignIn(false)} />}
+      <HeaderAfterSignIn />
 
       <div>
-        <h1>Welcome, {user?.email}</h1>
+        <h1>Welcome, {user?.uname}</h1>
       </div>
 
       {/* Hero Slides */}

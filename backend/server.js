@@ -45,32 +45,57 @@ app.post("/signin", (req, res) => {
       }
 
       // ✅ Send only user data
-      res.json({ id: user.id, email: user.email });
+      res.json({ id: user.id, email: user.email ,uname: user.uname });
     });
   });
 });
 
 // ✅ API route for Sign Up
 app.post("/signup", (req, res) => {
-  const { email, password } = req.body;
+  const { uname, email, password } = req.body;
 
-  // Hash the password
-  bcrypt.hash(password, 10, (err, hashedPassword) => {
-    if (err) return res.status(500).json({ error: "Error hashing password" });
+  // 1️⃣ Pre-check for existing user by email or username
+  const checkQuery = "SELECT uname, email FROM users WHERE email = ? OR uname = ?";
+  db.query(checkQuery, [email, uname], (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error while checking user" });
 
-    // Insert into database
-    const query = "INSERT INTO users (email, password) VALUES (?, ?)";
-    db.query(query, [email, hashedPassword], (err, result) => {
-      if (err) {
-        if (err.code === "ER_DUP_ENTRY") {
-          return res.status(409).json({ error: "Email already exists" });
-        }
-        return res.status(500).json({ error: "Database error" });
+    if (results.length > 0) {
+      // Check which one is taken
+      if (results.some((u) => u.email === email)) {
+        return res.status(409).json({ error: "Email already exists" });
       }
+      if (results.some((u) => u.uname === uname)) {
+        return res.status(409).json({ error: "Username already exists" });
+      }
+    }
 
-      res.json({ message: "Sign Up successful", userId: result.insertId });
+    // 2️⃣ Hash the password
+    bcrypt.hash(password, 10, (err, hashedPassword) => {
+      if (err) return res.status(500).json({ error: "Error hashing password" });
+
+      // 3️⃣ Insert into database
+      const insertQuery = "INSERT INTO users (uname, email, password) VALUES (?, ?, ?)";
+      db.query(insertQuery, [uname, email, hashedPassword], (err, result) => {
+        if (err) {
+          if (err.code === "ER_DUP_ENTRY") {
+            // As a fallback check, in case two requests come simultaneously
+            if (err.sqlMessage.includes("uname")) {
+              return res.status(409).json({ error: "Username already exists" });
+            } else if (err.sqlMessage.includes("email")) {
+              return res.status(409).json({ error: "Email already exists" });
+            } else {
+              return res.status(409).json({ error: "Duplicate entry" });
+            }
+          }
+          return res.status(500).json({ error: "Database error while inserting user" });
+        }
+
+        // 4️⃣ Respond success
+        res.json({ message: "Sign Up successful", userId: result.insertId });
+      });
     });
   });
 });
+
 
 app.listen(5000, () => console.log("🚀 Server running on port 5000"));

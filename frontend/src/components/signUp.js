@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const SignUp = ({ onClose }) => {
+  const [uname, setUname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -25,7 +26,7 @@ const SignUp = ({ onClose }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ uname, email, password }),
       });
 
       const data = await res.json();
@@ -49,6 +50,15 @@ const SignUp = ({ onClose }) => {
           <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>Sign Up</h1>
           <p style={{ textAlign: "center" }}>Please fill in this form to create an account.</p>
           <hr />
+
+          <label><b>Username</b></label>
+          <input 
+            type="text" 
+            placeholder="Enter Username" 
+            required 
+            value={uname} 
+            onChange={(e) => setUname(e.target.value)} 
+          />
           
           <label><b>Email</b></label>
           <input 
