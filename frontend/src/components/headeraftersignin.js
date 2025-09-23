@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../style.css";
 import "font-awesome/css/font-awesome.min.css";
 
 function HeaderAfterSignIn() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [uname, setUname] = useState("");
+  const navigate = useNavigate();
+  const [hover, setHover] = useState(false);
+
+  useEffect(() => {
+    // ✅ Get uname from localStorage when the component mounts
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser && storedUser.uname) {
+      setUname(storedUser.uname);
+    }
+  }, []);
+
+    const handleLogout = () => {
+    localStorage.removeItem("user"); // clear localStorage
+    navigate("/"); // redirect to home page
+  };
 
   return (
     <header>
@@ -54,17 +71,42 @@ function HeaderAfterSignIn() {
               zIndex: 1
             }}
           >
+            <li
+              style={{
+                fontWeight: "bold",
+                marginBottom: "10px",
+                textAlign: "center",
+                color: "#333",
+                whiteSpace: "nowrap"
+              }}
+            >
+              Hi, {uname || "User"}
+            </li>
             <li>
               <a href="/places">Places</a>
             </li>
             <li>
-              <a href="/booking">Booking</a>
+              <a href="/booking" style={{ whiteSpace: "nowrap" }}>Book a Trip</a>
+            </li>
+            <li>
+              <a href="/userbookings" style={{ whiteSpace: "nowrap" }}>My Bookings</a>
             </li>
             <li>
               <a href="/about">About</a>
             </li>
             <li>
               <a href="/contact" style={{ whiteSpace: "nowrap" }}>Contact Us</a>
+            </li>
+            <li
+              onClick={handleLogout}
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
+              style={{
+                color: hover ? "tomato" : "#232323",
+                cursor: "pointer",
+              }}
+            >
+              Logout
             </li>
           </ul>
         )}
