@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignIn = ({ onClose }) => {
+  const [uname, setUname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate(); // ✅
@@ -21,7 +22,11 @@ const SignIn = ({ onClose }) => {
       const data = await res.json();
       if (res.ok) {
         // ✅ Store user info if needed
-        localStorage.setItem("user", JSON.stringify(data.user)); 
+        localStorage.setItem("user", JSON.stringify({
+        id: data.id,
+        email: data.email,
+        uname: data.uname // store uname as well
+      }));
         onClose(); // close modal if you want
         navigate("/homeaftersignin"); // ✅ redirect to page
       } else {
