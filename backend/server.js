@@ -97,5 +97,83 @@ app.post("/signup", (req, res) => {
   });
 });
 
+// ✅ API route to save booking
+app.post("/bookings", (req, res) => {
+  const {
+    userId,
+    firstname,
+    lastname,
+    tno,
+    destination,
+    pickup,
+    drop,
+    travel,
+    cno,
+    email,
+    ano,
+    ldate,
+    rdate,
+    accommodation,
+    activities,
+    meals,
+    customRequests,
+    callback,
+    price
+  } = req.body;
+
+  const query = `
+    INSERT INTO bookings (
+      user_id, firstname, lastname, tno, destination, pickup, droped, travel, 
+      cno, email, ano, ldate, rdate, accommodation, activities, meals, 
+      customRequests, callback, price
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+    db.query(
+    query,
+    [
+      userId,
+      firstname,
+      lastname,
+      tno,
+      JSON.stringify(destination), // store array as JSON
+      pickup,
+      drop,
+      travel,
+      cno,
+      email,
+      ano,
+      ldate,
+      rdate,
+      accommodation,
+      JSON.stringify(activities), // store array as JSON
+      meals,
+      customRequests,
+      callback,
+      price
+    ],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Error saving booking" });
+      }
+      res.json({ message: "Booking saved successfully", bookingId: result.insertId });
+    }
+  );
+});
+
+// ✅ API route to get bookings for a user
+app.get("/bookings/:userId", (req, res) => {
+  const userId = req.params.userId;
+
+  db.query("SELECT * FROM bookings WHERE user_id = ?", [userId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Error fetching bookings" });
+    }
+    res.json(results);
+  });
+});
 
 app.listen(5000, () => console.log("🚀 Server running on port 5000"));

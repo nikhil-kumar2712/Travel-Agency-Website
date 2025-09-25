@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styles from "../css-modules/booking.module.css";
 
 function Booking() {
-  // State for form inputs
-  const [formData, setFormData] = useState({
+  // 1️⃣ Define initial state once
+  const initialFormState = {
     firstname: "",
     lastname: "",
     tno: "1",
@@ -21,8 +21,10 @@ function Booking() {
     meals: "breakfast",
     customRequests: "",
     callback: false,
-  });
+  };
 
+  // 2️⃣ State for form & price
+  const [formData, setFormData] = useState(initialFormState);
   const [price, setPrice] = useState(0);
 
   // handle input changes
@@ -76,11 +78,44 @@ function Booking() {
     setPrice(basePrice * travellers);
   }, [formData]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Booking submitted successfully!");
-    console.log(formData);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const userId = storedUser?.id;
+
+    const bookingData = {
+      userId,
+      price,
+      ...formData
+    };
+
+
+    try {
+      const res = await fetch("http://localhost:5000/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Booking submitted successfully!");
+        console.log("Booking ID:", data.bookingId);
+
+        // ✅ Clear form
+        setFormData(initialFormState);
+      } else {
+        const data = await res.json();
+        alert(`❌ ${data.error}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Error connecting to server.");
+    }
   };
+
 
   return (
     <div
@@ -324,4 +359,3 @@ function Booking() {
 }
 
 export default Booking;
-
