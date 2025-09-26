@@ -12,6 +12,7 @@ import Ayodhya from "./pages/ayodhya.js";
 import Kerala from "./pages/kerala.js";
 import HomeAfterSignIn from "./pages/HomeAfterSignIn";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import AdminHome from "./pages/AdminHome";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/ayodhya" element={<Ayodhya />} />
           <Route path="/kerala" element={<Kerala />} />
           <Route path="/homeaftersignin" element={<ProtectedRoute><HomeAfterSignIn /></ProtectedRoute>} />
+          <Route path="/adminhome" element={<ProtectedRoute><AdminHome /></ProtectedRoute>} />
         </Routes>
     </Router>
   );

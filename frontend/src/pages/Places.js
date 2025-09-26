@@ -8,7 +8,7 @@ const Places = () => {
   return (
     <div
       style={{
-        backgroundImage: "url('/assets/building image.jpeg')",
+        backgroundImage: "url('/assets/background.webp')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center",

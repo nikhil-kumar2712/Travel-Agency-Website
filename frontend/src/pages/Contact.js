@@ -5,7 +5,7 @@ function Contact() {
   return (
     <div
       style={{
-        backgroundImage: "url('/assets/building image.jpeg')",
+        backgroundImage: "url('/assets/background.webp')",
         backgroundSize: "cover",
         minHeight: "100vh",
       }}
