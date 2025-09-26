@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AdminHeader from "../components/adminheader";
+import styles from "../css-modules/adminhome.module.css";
 
 function AdminPanel() {
   const navigate = useNavigate();
@@ -22,8 +24,18 @@ function AdminPanel() {
   if (user?.role !== "admin") return <p>Access Denied</p>;
 
   return (
-    <div>
-      <h1>Admin Panel</h1>
+    <div
+      style={{
+        backgroundImage: "url('/assets/background.webp')",
+        backgroundSize: "cover",
+        minHeight: "100vh",
+      }}
+    >
+      <AdminHeader />
+      <div style={{ textAlign: "center" }} className={styles.container}>
+        <h2>Admin Panel</h2>
+      </div>
+      
       <nav>
         <a href="#add-place">Add New Place</a> | 
         <a href="#bookings">View Bookings</a>
@@ -36,6 +48,13 @@ function AdminPanel() {
       <section id="bookings">
         {/* Bookings Table */}
       </section>
+
+      {/* Footer */}
+      <footer style={{ textAlign: "center", marginTop: "20px" }}>
+        Made with &hearts; by Vtravellers
+        <br />
+        &#169; 2024-&infin;
+      </footer>
     </div>
   );
 }
