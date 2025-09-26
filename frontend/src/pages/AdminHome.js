@@ -35,9 +35,9 @@ function AdminPanel() {
       <div style={{ textAlign: "center" }} className={styles.container}>
         <h2>Admin Panel</h2>
       </div>
-      
+
       <nav>
-        <a href="#add-place">Add New Place</a> | 
+        <a href="#add-place">Add New Place</a> 
         <a href="#bookings">View Bookings</a>
       </nav>
 
