@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignIn = ({ onClose }) => {
-  const [uname, setUname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate(); // ✅
@@ -25,10 +24,16 @@ const SignIn = ({ onClose }) => {
         localStorage.setItem("user", JSON.stringify({
         id: data.id,
         email: data.email,
-        uname: data.uname // store uname as well
+        uname: data.uname,
+        role: data.role // store uname as well
       }));
         onClose(); // close modal if you want
-        navigate("/homeaftersignin"); // ✅ redirect to page
+        // ✅ Redirect based on role
+        if (data.role === "admin") {
+          navigate("/adminhome"); // for admin
+        } else {
+          navigate("/homeaftersignin"); // for normal user
+        }
       } else {
         alert(`❌ ${data.error || data.message}`);
       }

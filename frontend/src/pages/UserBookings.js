@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import styles from "../css-modules/userbooking.module.css";
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
@@ -26,67 +27,63 @@ function MyBookings() {
       });
   }, []);
 
-  const safeParseArray = (value) => {
-    try {
-      const parsed = JSON.parse(value);
-      return Array.isArray(parsed) ? parsed.join(", ") : parsed;
-    } catch {
-      return value; // fallback if plain string
-    }
+  // ✅ Format date (remove time)
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    // DB may give "YYYY-MM-DDTHH:MM:SS" or "YYYY-MM-DD HH:MM:SS"
+    return dateString.split("T")[0].split(" ")[0];
   };
 
   if (loading) return <p style={{ textAlign: "center" }}>Loading bookings...</p>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>My Bookings</h2>
+    <div style={{
+        backgroundImage: "url('/assets/background.webp')",
+        backgroundSize: "1600px 800px",
+        minHeight: "100vh",
+      }} 
+      className={styles.pageWrapper}>
+      <h2 className={styles.title}>My Bookings</h2>
       {bookings.length === 0 ? (
-        <p>No bookings yet.</p>
+        <p style={{ textAlign: "center", marginTop: "20px" }}>No bookings yet.</p>
       ) : (
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            marginTop: "20px",
-          }}
-        >
-          <thead>
-            <tr>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Booking ID</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Destinations</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Travellers</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Travel Mode</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Accommodation</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Activities</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Dates</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookings.map((b) => (
-              <tr key={b.id}>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{b.id}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {safeParseArray(b.destination)}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{b.tno}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{b.travel}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{b.accommodation}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {safeParseArray(b.activities)}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {b.ldate} - {b.rdate}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>₹{Number(b.price).toLocaleString("en-IN")}</td> 
+        <div className={styles.tableWrapper}>
+          <table className={styles.bookingsTable}>
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Destinations</th>
+                <th>Travellers</th>
+                <th>Travel Mode</th>
+                <th>Accommodation</th>
+                <th>Activities</th>
+                <th>Dates</th>
+                <th>Price</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {bookings.map((b) => (
+                <tr key={b.id}>
+                  <td>{b.id}</td>
+                  <td>{Array.isArray(b.destination) ? b.destination.join(", ") : b.destination}</td>
+                  <td>{b.tno}</td>
+                  <td>{b.travel}</td>
+                  <td>{b.accommodation}</td>
+                  <td>{Array.isArray(b.activities) ? b.activities.join(", ") : b.activities}</td>
+                  <td>
+                    {formatDate(b.ldate)} - {formatDate(b.rdate)}
+                  </td>
+                  <td className={styles.price}>
+                    ₹{Number(b.price).toLocaleString("en-IN")}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
 }
 
 export default MyBookings;
-

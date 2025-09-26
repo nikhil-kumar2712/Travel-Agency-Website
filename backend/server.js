@@ -45,7 +45,7 @@ app.post("/signin", (req, res) => {
       }
 
       // ✅ Send only user data
-      res.json({ id: user.id, email: user.email ,uname: user.uname });
+      res.json({ id: user.id, email: user.email ,uname: user.uname ,role: user.role});
     });
   });
 });

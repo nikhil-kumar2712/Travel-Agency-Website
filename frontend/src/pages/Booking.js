@@ -120,7 +120,7 @@ function Booking() {
   return (
     <div
       style={{
-        backgroundImage: "url('/assets/building image.jpeg')",
+        backgroundImage: "url('/assets/booking background.webp')",
         backgroundSize: "1600px 1400px",
         minHeight: "100vh",
       }}

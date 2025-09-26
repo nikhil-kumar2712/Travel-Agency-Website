@@ -1,0 +1,71 @@
+/* Container background */
+.pageWrapper {
+  padding: 40px;
+  background-color: #f7f9fb;
+  min-height: 100vh;
+}
+
+/* Title */
+.title {
+  text-align: center;
+  font-size: 2rem;
+  color: #333;
+}
+
+/* Card-style wrapper for the table */
+.tableWrapper {
+  max-width: 1200px;
+  margin: 30px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Table styling */
+.bookingsTable {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Table header row */
+.bookingsTable thead tr {
+  background-color: #3ec0e7;
+  color: #fff;
+  text-align: left;
+}
+
+/* Header cells */
+.bookingsTable th {
+  padding: 12px 15px;
+  font-size: 1rem;
+}
+
+/* Table rows */
+.bookingsTable tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+.bookingsTable tbody tr:nth-child(even) {
+  background-color: #f2f9fc;
+}
+
+.bookingsTable tbody tr:hover {
+  background-color: #e8f6fb;
+}
+
+/* Table cells */
+.bookingsTable td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Price cell highlight */
+.price {
+  font-weight: bold;
+  color: #2c3e50;
+}
