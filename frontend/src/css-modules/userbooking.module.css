@@ -14,7 +14,6 @@
 
 /* Card-style wrapper for the table */
 .tableWrapper {
-  max-width: 1200px;
   margin: 30px auto;
   background-color: #fff;
   padding: 20px;
@@ -41,6 +40,7 @@
 .bookingsTable th {
   padding: 12px 15px;
   font-size: 1rem;
+  white-space: nowrap;
 }
 
 /* Table rows */
@@ -68,4 +68,11 @@
 .price {
   font-weight: bold;
   color: #2c3e50;
+}
+
+/* Wrapper around the table to enable horizontal scrolling */
+.scrollContainer {
+  overflow-x: auto;      /* horizontal scrolling */
+  -webkit-overflow-scrolling: touch; /* smooth on mobile */
+  width: 100%;
 }

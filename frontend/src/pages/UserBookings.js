@@ -47,16 +47,19 @@ function MyBookings() {
       {bookings.length === 0 ? (
         <p style={{ textAlign: "center", marginTop: "20px" }}>No bookings yet.</p>
       ) : (
-        <div className={styles.tableWrapper}>
+        <div className={`${styles.tableWrapper} ${styles.scrollContainer}`}>
           <table className={styles.bookingsTable}>
             <thead>
               <tr>
                 <th>Booking ID</th>
                 <th>Destinations</th>
                 <th>Travellers</th>
-                <th>Travel Mode</th>
+                <th>Travel Mode</th>  
+                <th>Pickup Location</th>
+                <th>Drop Location</th>
                 <th>Accommodation</th>
                 <th>Activities</th>
+                <th>Meal Choice</th>
                 <th>Dates</th>
                 <th>Price</th>
               </tr>
@@ -68,8 +71,11 @@ function MyBookings() {
                   <td>{Array.isArray(b.destination) ? b.destination.join(", ") : b.destination}</td>
                   <td>{b.tno}</td>
                   <td>{b.travel}</td>
+                  <td>{b.pickup}</td>
+                  <td>{b.droped}</td>
                   <td>{b.accommodation}</td>
                   <td>{Array.isArray(b.activities) ? b.activities.join(", ") : b.activities}</td>
+                  <td>{b.meals}</td>
                   <td>
                     {formatDate(b.ldate)} - {formatDate(b.rdate)}
                   </td>
