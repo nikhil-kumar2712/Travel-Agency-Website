@@ -176,4 +176,15 @@ app.get("/bookings/:userId", (req, res) => {
   });
 });
 
+// ✅ API route to get all bookings
+app.get("/adminhome", (req, res) => {
+  db.query("SELECT * FROM bookings", (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Error fetching bookings" });
+    }
+    res.json(results);
+  });
+});
+
 app.listen(5000, () => console.log("🚀 Server running on port 5000"));
