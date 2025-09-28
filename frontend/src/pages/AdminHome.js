@@ -8,6 +8,7 @@ function AdminPanel() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("add-place"); // default
   const [bookings, setBookings] = useState([]);
+  const [filterDate, setFilterDate] = useState("");
 
   // ✅ Format date (remove time)
   const formatDate = (dateString) => {
@@ -80,7 +81,7 @@ function AdminPanel() {
         id="add-place"
         style={{ display: activeSection === "add-place" ? "block" : "none" }}
       >
-        {/* Add Place Form */}
+        {/* Place Form */}
         <div style={{ textAlign: "center", marginTop: "30px" }}>
           <h3>Add a New Place</h3>
           {/* Your form code here */}
@@ -93,7 +94,23 @@ function AdminPanel() {
       >
         {/* Bookings Table */}
         <div className={styles.pageWrapper}>
-          <h2 className={bookingstyles.title}>All Current Bookings</h2>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h2 className={styles.title}>All Current Bookings</h2>
+
+            {/* Filter by Booking Date */}
+            <input
+              type="date"
+              value={filterDate}
+              onChange={(e) => setFilterDate(e.target.value)}
+              style={{
+                padding: "6px",
+                borderRadius: "6px",
+                marginLeft: "410px",
+                border: "1px solid #ccc",
+                cursor: "pointer",
+              }}
+            />
+          </div>
           {bookings.length === 0 ? (
           <p style={{ textAlign: "center", marginTop: "20px" }}>No bookings yet.</p>
           ) : (
@@ -123,7 +140,12 @@ function AdminPanel() {
                 </tr>
               </thead>
               <tbody>
-                {bookings.map((b) => (
+                {bookings.filter((b) => {
+                            if (!filterDate) return true; // no filter
+                            // convert both to YYYY-MM-DD
+                            const bookingDate = formatDate(b.created_at); 
+                            return bookingDate === filterDate;
+                          }).map((b) => (
                   <tr key={b.id}>
                     <td>{b.id}</td>
                     <td>{b.user_id}</td>  
