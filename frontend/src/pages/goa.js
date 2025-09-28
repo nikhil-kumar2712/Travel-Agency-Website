@@ -4,11 +4,11 @@ import styles from "../css-modules/addplaces.module.css";
 function Addplaces() {
   // --- Slideshow ---
   const images = [
-    "/assets/pune1.jpg",
-    "/assets/pune2.jpg",
-    "/assets/pune3.jpg",
-    "/assets/pune4.jpg",
-    "/assets/pune5.jpg",
+    "/assets/goa1.jpg",
+    "/assets/goa2.jpg",
+    "/assets/goa3.jpg",
+    "/assets/goa4.jpg",
+    "/assets/goa5.jpg",
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -107,7 +107,6 @@ function Addplaces() {
           <li>Meal Plan: Breakfast & Dinner</li>
           <li>Vehicle: Sedan</li>
           <li>A/C Cab for all transfers and sightseeing as per itinerary</li>
-          <li>1 Day North Goa & 1 Day South Goa sightseeing</li>
           <li>Toll, Parking, driver’s Bata, road tax & fuel charges</li>
           <li>Pick up and drop: Goa / Mopa Airport</li>
         </ul>

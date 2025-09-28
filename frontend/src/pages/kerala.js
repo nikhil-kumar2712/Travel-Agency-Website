@@ -1,110 +1,148 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import styles from "../css-modules/addplaces.module.css";
 
-function Kerala() {
+function Addplaces() {
+  // --- Slideshow ---
+  const images = [
+    "/assets/kerela1.jpg",
+    "/assets/kerela2.jpg",
+    "/assets/kerela3.jpg",
+    "/assets/kerela4.jpg",
+    "/assets/kerela5.jpg",
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [images.length]);
+
   return (
-    <div>
+    <div style={{
+        backgroundImage: "url('/assets/background.webp')",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh"
+      }}
+      className={styles.container}>
       {/* Header */}
       <header>
         <div id="navbar">
           <img
             src="/assets/logo.png"
-            alt="logo"
-            style={{ paddingTop: "7px", paddingLeft: "20px", height: "35px", width: "60px" }}
+            alt="Logo"
+            style={{
+              paddingTop: "7px",
+              paddingLeft: "20px",
+              height: "35px",
+              width: "60px",
+            }}
           />
           <a id="logo">Vtravellers.in</a>
         </div>
       </header>
 
       {/* Title */}
-      <h1 style={{ border: "2px solid DodgerBlue" }}>Kerala</h1>
+      <h1 className={styles.page_title}>Kerala</h1>
 
-      {/* Hero Image */}
-      <div className="mySlides fade">
-        <img src="istockphoto-511119924-612x612.jpg" alt="Kerala Scenic" width="350" height="260" />
+      {/* Slideshow */}
+      <div className={styles.slideshow}>
+        <img
+          src={images[currentIndex]}
+          alt="Tourist Place"
+          className={styles.slide_image}
+        />
       </div>
 
-      {/* Package Details */}
-      <p>
-        <h3 style={{ backgroundColor: "powderblue" }}>Short Trip To Kerala</h3>
-        Product Code : KLLT001 <br />
-        Product Name : Short Trip to Kerala | 4N/5D <br />
-        Program : Cochin - Munnar 2N - Thekkady 1N - Alleppey 1N - Cochin <br />
-        Travel Validity : From Now to March 2024 <br />
-        Per Person Cost: ₹14000/- Nett <br />
-        <br />
-        <strong>Hotel Options:</strong> <br />
-        Munnar : At Woods Resorts | Munnar Castle | Lake N Hills <br />
-        Thekkady : Periyar Meadows | Patio | Peppervine <br />
-        Alleppey : AJ Park | Pagoda <br />
-        *Note: Hotels will be blocked based on availability only.
-      </p>
-
-      {/* Day 1 */}
-      <p>
-        <h3 style={{ backgroundColor: "powderblue" }}>Day 01 : Arrive Cochin – Munnar</h3>
-        <img src="k1.jpg" alt="Day 1" width="300" height="200" />
+      <div className={styles.vcontent} style={{ color: "#0056b3", marginTop: "20px", textAlign: "center" }}>
+        <h1>Explore Kerala</h1>
         <p>
-          On arrival at Cochin Airport / Ernakulam Railway station, drive to Munnar (04 Hrs) enroute visit Valara and Cheeyappara waterfalls and natural scenic spots. Check in at hotel and relax for rest of the day. Overnight stay at Munnar.
+          Discover the lush greenery, backwaters, and cultural beauty of “God’s Own Country” with VTravellers. 
+          From serene houseboats to tea gardens – Kerala has it all!
         </p>
-      </p>
+      </div>
 
-      {/* Day 2 */}
-      <p>
-        <h3 style={{ backgroundColor: "powderblue" }}>Day 02 : Munnar</h3>
-        <img src="k2.jpg" alt="Day 2" width="300" height="200" />
-        <p>
-          After breakfast, local sightseeing of Munnar including Tata Tea Museum, Mattupetty Dam, Echo Point, Photo Point, and Rajamalai (Eravikulam National Park) to spot Nilgiri Thars. Overnight stay at Munnar.
-        </p>
-      </p>
+      {/* Packages */}
+      <section>
+        <h2 className={styles.section_title}>Our Packages</h2>
+        <div className={styles.packages_container}>
+          <div className={styles.package_card}>
+            <h3>1 Day Package</h3>
+            <p>
+              Visit Kochi Fort, Chinese Fishing Nets, Marine Drive and Mattancherry Palace.  
+              Includes local guide and transport.
+            </p>
+            <p className={styles.price}>₹2,000/- per person</p>
+          </div>
 
-      {/* Day 3 */}
-      <p>
-        <h3 style={{ backgroundColor: "powderblue" }}>Day 03 : Munnar – Thekkady</h3>
-        <img src="k3.jpg" alt="Day 3" width="300" height="200" />
-        <p>
-          After breakfast, drive to Thekkady (04 Hrs). Visit Periyar Wildlife Sanctuary, enjoy boating at Periyar Lake, Kathakali, Kalari, and Spice Plantation (direct payment basis). Overnight stay at Thekkady.
-        </p>
-      </p>
+          <div className={styles.package_card}>
+            <h3>2 Days Package</h3>
+            <p>
+              Day 1: Kochi city tour (Fort Kochi, Mattancherry Palace, St. Francis Church);  
+              Day 2: Alleppey backwater cruise and village visit. Includes hotel stay, breakfast, and transport.
+            </p>
+            <p className={styles.price}>₹6,200/- per person</p>
+          </div>
 
-      {/* Day 4 */}
-      <p>
-        <h3 style={{ backgroundColor: "powderblue" }}>Day 04 : Thekkady - Alleppey</h3>
-        <img src="k4.jpg" alt="Day 4" width="300" height="200" />
-        <p>
-          After breakfast, drive to Alleppey (04 Hrs). Famous for houseboat cruises along Kerala backwaters. Visit Sree Krishnaswamy temple, Lighthouse, Coir Museum & Beach. Overnight stay at Alleppey.
-        </p>
-      </p>
+          <div className={styles.package_card}>
+            <h3>3 Days Package</h3>
+            <p>
+              Day 1: Kochi sightseeing (Mattancherry, Marine Drive, Fort Kochi);  
+              Day 2: Munnar tea plantations, waterfalls;  
+              Day 3: Alleppey houseboat cruise. Includes hotel stay, breakfast, and transport.
+            </p>
+            <p className={styles.price}>₹9,500/- per person</p>
+          </div>
 
-      {/* Day 5 */}
-      <p>
-        <h3 style={{ backgroundColor: "powderblue" }}>Day 05 : Alleppey - Cochin</h3>
-        <img src="k5.jpg" alt="Day 5" width="300" height="200" />
-        <p>
-          After breakfast, check out from hotel and drive back to Cochin Airport / Railway station with wonderful holiday memories of God’s Own Country.
-        </p>
-      </p>
+          <div className={styles.package_card}>
+            <h3>4 Days Package</h3>
+            <p>
+              Complete Kerala tour covering Kochi, Munnar tea estates, Thekkady wildlife sanctuary,
+              and Alleppey backwaters. Includes hotel stay, breakfast, guided tours, and transport.
+            </p>
+            <p className={styles.price}>₹12,800/- per person</p>
+          </div>
+
+          <div className={styles.package_card}>
+            <h3>5 Days Package</h3>
+            <p>
+              Extended Kerala holiday with Kochi city tour, Munnar tea gardens, Thekkady safari,
+              Alleppey/Kumarakom houseboat, and Kovalam beach leisure. Includes hotel stay, meals, transport, and activities.
+            </p>
+            <p className={styles.price}>₹16,500/- per person</p>
+          </div>
+        </div>
+      </section>
 
       {/* Inclusions */}
-      <p>
-        <h3 style={{ backgroundColor: "powderblue" }}>Inclusions</h3>
-        <p>Arrival and Departure assistance at the Airport/Railway station.</p>
-        <p>Daily Buffet Breakfast at the hotel.</p>
-        <p>Air conditioned Vehicles for all Transfers & Sightseeing as per the itinerary.</p>
-        <p>Accommodation on Double Sharing Basis.</p>
-        <p>All expenses related to vehicle inclusive of Toll, fuel, parking.</p>
-        <p>All government related taxes.</p>
-      </p>
+      <section>
+        <h3 className={styles.section_subtitle}>Inclusions</h3>
+        <ul className={styles.list}>
+          <li>Arrival and Departure assistance at the Airport/Railway station.</li>
+          <li>Daily Buffet Breakfast at the hotel.</li>
+          <li>Air conditioned Vehicles for all Transfers & Sightseeing as per the itinerary.</li>
+          <li>Accommodation on Double Sharing Basis.</li>
+          <li>All expenses related to vehicle inclusive of Toll, fuel, parking.</li>
+          <li>All government related taxes.</li>
+        </ul>
+      </section>
 
       {/* Exclusions */}
-      <p>
-        <h3 style={{ backgroundColor: "powderblue" }}>Exclusions</h3>
-        <p>Flight / Train Fare / Darshan tickets.</p>
-        <p>Guide and Entrance Fee at monuments and sightseeing places.</p>
-        <p>Lunch & Dinner at the hotel.</p>
-        <p>Any personal expenses such as telephone, laundry bills etc.</p>
-        <p>Any additional activities.</p>
-        <p>Gala dinner charges on Christmas and New Year's Eve.</p>
-      </p>
+      <section>
+        <h3 className={styles.section_subtitle}>Exclusions</h3>
+        <ul className={styles.list}>
+          <li>Flight / Train Fare / Darshan tickets.</li>
+          <li>Guide and Entrance Fee at monuments and sightseeing places.</li>
+          <li>Lunch & Dinner at the hotel.</li>
+          <li>Any personal expenses such as telephone, laundry bills etc.</li>
+          <li>Any additional activities.</li>
+          <li>Gala dinner charges on Christmas and New Year's Eve.</li>
+        </ul>
+      </section>
 
       {/* Footer */}
       <footer>
@@ -115,4 +153,4 @@ function Kerala() {
   );
 }
 
-export default Kerala;
+export default Addplaces;
