@@ -48,3 +48,74 @@
   white-space: nowrap;
   margin-left: 550px;
 }
+
+/* --- Form Container --- */
+.addPlaceForm {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 10%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* --- Labels --- */
+.label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 4px;
+}
+
+/* --- Input Fields --- */
+.input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 0 4px rgba(0, 86, 179, 0.2);
+}
+
+/* --- Textarea --- */
+.textarea {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  resize: vertical;
+  transition: border 0.3s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 0 4px rgba(0, 86, 179, 0.2);
+}
+
+/* --- Submit Button --- */
+.submitBtn {
+  background-color: #0056b3;
+  color: #ffffff;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1% 43%;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submitBtn:hover {
+  background-color: #003f82;
+  transform: scale(1.02);
+}
