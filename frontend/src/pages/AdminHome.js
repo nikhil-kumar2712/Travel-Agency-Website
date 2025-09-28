@@ -9,6 +9,14 @@ function AdminPanel() {
   const [activeSection, setActiveSection] = useState("add-place"); // default
   const [bookings, setBookings] = useState([]);
   const [filterDate, setFilterDate] = useState("");
+  const [inclusions, setInclusions] = useState([""]);
+  const [exclusions, setExclusions] = useState([""]);
+  const [placeName, setPlaceName] = useState("");
+  const [description, setDescription] = useState("");
+  const [images, setImages] = useState([]);
+  const [packages, setPackages] = useState([
+    { heading: "", description: "", price: "" },
+  ]);
 
   // ✅ Format date (remove time)
   const formatDate = (dateString) => {
@@ -42,6 +50,60 @@ function AdminPanel() {
   
   const user = JSON.parse(localStorage.getItem("user"));
   if (user?.role !== "admin") return <p>Access Denied</p>;
+
+  const handleInclusionChange = (index, value) => {
+    const updated = [...inclusions];    
+    updated[index] = value;
+    setInclusions(updated);
+  };
+
+  const handleExclusionChange = (index, value) => {
+    const updated = [...exclusions];
+    updated[index] = value;
+    setExclusions(updated);
+  };
+
+  const addInclusion = () => setInclusions([...inclusions, ""]);
+  const removeInclusion = (index) => setInclusions(inclusions.filter((_, i) => i !== index));
+
+  const addExclusion = () => setExclusions([...exclusions, ""]);
+  const removeExclusion = (index) => setExclusions(exclusions.filter((_, i) => i !== index));
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setImages(files); // store file objects
+  };
+
+  const handlePackageChange = (index, field, value) => {
+    const newPackages = [...packages];
+    newPackages[index][field] = value;
+    setPackages(newPackages);
+  };
+
+  // Add new package
+  const addPackage = () => {
+    setPackages([...packages, { heading: "", description: "", price: "" }]);
+  };
+
+  // Remove package
+  const removePackage = (index) => {
+    const newPackages = packages.filter((_, i) => i !== index);
+    setPackages(newPackages);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // send data to backend here
+    console.log({
+      placeName,
+      description,
+      images,
+      packages,
+      inclusions,
+      exclusions,
+    });
+    alert("Place uploaded successfully!");
+  };
 
   return (
     <div
@@ -82,9 +144,125 @@ function AdminPanel() {
         style={{ display: activeSection === "add-place" ? "block" : "none" }}
       >
         {/* Place Form */}
-        <div style={{ textAlign: "center", marginTop: "30px" }}>
-          <h3>Add a New Place</h3>
-          {/* Your form code here */}
+        <div className={styles.pageWrapper}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h2 style={{ marginLeft: "460px" , paddingBottom: "30px" }} className={styles.title}>Fill this form to add a new place</h2>   
+          </div>
+          <form className={styles.addPlaceForm} onSubmit={handleSubmit}>
+            {/* Place Name */}
+            <label className={styles.label}>Place Name</label>
+            <input
+              type="text"
+              name="placeName"
+              placeholder="e.g. Goa"
+              className={styles.input}
+              onChange={(e) => setPlaceName(e.target.value)}
+              required
+            />
+
+            {/* Description */}
+            <label className={styles.label}>Short Description</label>
+            <textarea
+              name="description"
+              placeholder="Brief intro about the place"
+              className={styles.textarea}
+              rows="3"
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+
+            {/* Images */}
+            <label className={styles.label}>Upload Images</label>
+            <input
+              type="file"
+              name="images"
+              className={styles.input}
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+            />
+
+            {/* Packages */}
+            <label className={styles.label}>Package Details</label>
+            {packages.map((pkg, index) => (
+              <div key={index} className="package-input">
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="Package Heading (e.g. 1 Day Package)"
+                  value={pkg.heading}
+                  onChange={(e) => handlePackageChange(index, "heading", e.target.value)}
+                />
+                <textarea
+                  className="input"
+                  placeholder="Description"
+                  value={pkg.description}
+                  onChange={(e) => handlePackageChange(index, "description", e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="Price (e.g. ₹1,000/- per person)"
+                  value={pkg.price}
+                  onChange={(e) => handlePackageChange(index, "price", e.target.value)}
+                />
+                <button type="button" onClick={() => removePackage(index)}>
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button type="button" onClick={addPackage}>
+              + Add More Package
+            </button>
+
+            {/* Inclusions */}
+            <label className={styles.label}>Inclusions</label>
+            {inclusions.map((inc, index) => (
+              <div key={index} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <input
+                  type="text"
+                  placeholder={`Inclusion ${index + 1}`}
+                  value={inc}
+                  onChange={(e) => handleInclusionChange(index, e.target.value)}
+                />
+                <button type="button" onClick={() => removeInclusion(index)}>Remove</button>
+              </div>
+            ))}
+            
+            <button
+              type="button"
+              className={styles.addBtn}
+              onClick={addInclusion}
+            >
+              + Add More Inclusion
+            </button>
+
+            {/* Exclusions */}
+            <label className={styles.label}>Exclusions</label>
+            {exclusions.map((exc, index) => (
+              <div key={index} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <input
+                  type="text"
+                  placeholder={`Exclusion ${index + 1}`}
+                  value={exc}
+                  onChange={(e) => handleExclusionChange(index, e.target.value)}
+                />
+                <button type="button" onClick={() => removeExclusion(index)}>Remove</button>
+              </div>
+            ))}
+            <button
+              type="button"
+              className={styles.addBtn}
+              onClick={addExclusion}
+            >
+              + Add More Exclusion
+            </button>
+
+            {/* Submit */}
+            <button type="submit" className={styles.submitBtn}>
+              Add Place
+            </button>
+          </form>
         </div>
       </section>
 
@@ -95,7 +273,7 @@ function AdminPanel() {
         {/* Bookings Table */}
         <div className={styles.pageWrapper}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h2 className={styles.title}>All Current Bookings</h2>
+            <h2 style={{ marginLeft: "550px" }} className={styles.title}>All Current Bookings</h2>
 
             {/* Filter by Booking Date */}
             <input
