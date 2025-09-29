@@ -14,9 +14,8 @@ function AdminPanel() {
   const [placeName, setPlaceName] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
-  const [packages, setPackages] = useState([
-    { heading: "", description: "", price: "" },
-  ]);
+  const [packages, setPackages] = useState([{ heading: "", description: "", price: "" },]);
+  const [existingPlaces, setExistingPlaces] = useState([]);
 
   // ✅ Format date (remove time)
   const formatDate = (dateString) => {
@@ -24,6 +23,13 @@ function AdminPanel() {
     // DB may give "YYYY-MM-DDTHH:MM:SS" or "YYYY-MM-DD HH:MM:SS"
     return dateString.split("T")[0].split(" ")[0];
   };
+
+  useEffect(() => {
+    fetch("http://localhost:5000/places") // Adjust endpoint to return all places
+      .then(res => res.json())
+      .then(data => setExistingPlaces(data))
+      .catch(err => console.error("Error fetching existing places:", err));
+  }, []);
 
   useEffect(() => {
     fetch("http://localhost:5000/adminhome")
@@ -158,6 +164,19 @@ function AdminPanel() {
         <div className={styles.pageWrapper}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <h2 style={{ marginLeft: "460px" , paddingBottom: "30px" }} className={styles.title}>Fill this form to add a new place</h2>   
+          </div>
+          <div style={{ marginBottom: "20px", textAlign: "center" }}>
+            <label style={{ fontWeight: "bold", marginRight: "10px" }}>
+              Existing Places:
+            </label>
+            <select style={{ padding: "5px", width: "300px" , textAlign: "center" }}>
+              <option value="">-- List of all already available places --</option>
+              {existingPlaces.map((place) => (
+                <option key={place.id} value={place.name}>
+                  {place.name}
+                </option>
+              ))}
+            </select>
           </div>
           <form className={styles.addPlaceForm} onSubmit={handleSubmit} encType="multipart/form-data">
             {/* Place Name */}
