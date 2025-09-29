@@ -3,10 +3,12 @@ const mysql = require("mysql2");
 const bcrypt = require("bcryptjs");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const multer = require("multer");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use("/uploads", express.static("uploads")); 
 
 // ✅ Connect to MySQL
 const db = mysql.createConnection({
@@ -16,6 +18,19 @@ const db = mysql.createConnection({
   database: "travel",
   port: 3306
 });
+
+// Set storage location
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 
 db.connect((err) => {
   if (err) {
@@ -184,6 +199,72 @@ app.get("/adminhome", (req, res) => {
       return res.status(500).json({ error: "Error fetching bookings" });
     }
     res.json(results);
+  });
+});
+
+// Route to insert place + related data
+app.post("/places", upload.array("images"), (req, res) => {
+  let { placeName, description, packages, inclusions, exclusions } = req.body;
+
+  // Parse JSON strings into real arrays/objects
+  try {
+    packages = JSON.parse(packages || "[]");
+    inclusions = JSON.parse(inclusions || "[]");
+    exclusions = JSON.parse(exclusions || "[]");
+  } catch (err) {
+    return res.status(400).json({ error: "Invalid JSON in request" });
+  }
+
+  // Insert into places table first
+  const placeQuery = "INSERT INTO places (name, description) VALUES (?, ?)";
+  db.query(placeQuery, [placeName, description], (err, result) => {
+    if (err) return res.status(500).json({ error: err });
+    const placeId = result.insertId;
+
+   // Insert images
+    req.files.forEach((file) => {
+      const imgPath = "uploads/" + file.filename;
+      console.log("Inserting image:", imgPath);
+      db.query(
+        "INSERT INTO place_images (place_id, image_url) VALUES (?, ?)",
+        [placeId, imgPath],
+        (err) => {
+          if (err) console.error(err);
+        }
+      );
+    });
+
+    // Insert packages
+    packages.forEach((pkg) => {
+      console.log("Inserting package:", pkg);
+      db.query(
+        "INSERT INTO packages (place_id, title, description, price) VALUES (?, ?, ?, ?)",
+        [placeId, pkg.heading, pkg.description, pkg.price],
+        (err) => { if (err) console.error(err); }
+      );
+    });
+
+    // Insert inclusions
+    inclusions.forEach((inc) => {
+      console.log("Inserting inclusion:", inc);
+      db.query(
+        "INSERT INTO inclusions (place_id, item) VALUES (?, ?)",
+        [placeId, inc],
+        (err) => {if (err) console.error(err);}
+      );
+    });
+
+    // Insert exclusions
+      exclusions.forEach((exc) => {
+        console.log("Inserting exclusion:", exc);
+        db.query(
+          "INSERT INTO exclusions (place_id, item) VALUES (?, ?)",
+          [placeId, exc],
+          (err) => {if (err) console.error(err);}
+        );
+      });
+
+    res.json({ message: "Place added successfully", placeId });
   });
 });
 

@@ -71,7 +71,7 @@ function AdminPanel() {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    setImages(files); // store file objects
+    setImages(files);
   };
 
   const handlePackageChange = (index, field, value) => {
@@ -91,17 +91,28 @@ function AdminPanel() {
     setPackages(newPackages);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // send data to backend here
-    console.log({
-      placeName,
-      description,
-      images,
-      packages,
-      inclusions,
-      exclusions,
+
+    const formData = new FormData();
+    formData.append("placeName", placeName);
+    formData.append("description", description);
+
+    // Append images
+    images.forEach((file) => {
+      formData.append("images", file);
     });
+
+    // Append packages as JSON string
+    formData.append("packages", JSON.stringify(packages));
+    formData.append("inclusions", JSON.stringify(inclusions));
+    formData.append("exclusions", JSON.stringify(exclusions));
+
+    await fetch("http://localhost:5000/places", {
+      method: "POST",
+      body: formData
+    });
+
     alert("Place uploaded successfully!");
   };
 
@@ -117,7 +128,7 @@ function AdminPanel() {
 
       <div style={{ textAlign: "center" }} className={styles.container}>
         <h2>Admin Panel</h2>
-        {/* ✅ Buttons to toggle sections */}
+        {/* Buttons to toggle sections */}
         <div style={{ marginTop: "40px" }}>
           <button
             className={`${styles.toggleBtn} ${
@@ -138,7 +149,7 @@ function AdminPanel() {
         </div>
       </div>
 
-      {/* ✅ Conditional Sections */}
+      {/* Conditional Sections */}
       <section
         id="add-place"
         style={{ display: activeSection === "add-place" ? "block" : "none" }}
@@ -148,7 +159,7 @@ function AdminPanel() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <h2 style={{ marginLeft: "460px" , paddingBottom: "30px" }} className={styles.title}>Fill this form to add a new place</h2>   
           </div>
-          <form className={styles.addPlaceForm} onSubmit={handleSubmit}>
+          <form className={styles.addPlaceForm} onSubmit={handleSubmit} encType="multipart/form-data">
             {/* Place Name */}
             <label className={styles.label}>Place Name</label>
             <input
@@ -228,7 +239,6 @@ function AdminPanel() {
                 <button type="button" onClick={() => removeInclusion(index)}>Remove</button>
               </div>
             ))}
-            
             <button
               type="button"
               className={styles.addBtn}
