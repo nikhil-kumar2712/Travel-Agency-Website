@@ -3,16 +3,27 @@ import { useEffect, useState } from "react";
 import styles from "../css-modules/addplaces.module.css";
 
 function PlacePage() {
-  const { placeName } = useParams(); // e.g. goa, kerala
+  const { placeName } = useParams();
   const [placeData, setPlaceData] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:5000/places/${placeName}")
+    fetch(`http://localhost:5000/places/${encodeURIComponent(placeName)}`)
       .then(res => res.json())
       .then(data => setPlaceData(data));
   }, [placeName]);
 
-  if (!placeData) return <p>Loading...</p>;
+  // Slideshow timer
+  useEffect(() => {
+    if (placeData?.images?.length) {
+      const timer = setInterval(() => {
+        setCurrentIndex(prev => (prev + 1) % placeData.images.length);
+      }, 3000); // 3 seconds per slide
+      return () => clearInterval(timer);
+    }
+  }, [placeData]);
+
+  if (!placeData) return <p>Unable to Load...</p>;
 
   return (
     <div style={{
@@ -41,12 +52,21 @@ function PlacePage() {
         </header>
 
         {/* Title */}
-        <h1 className={styles.page_title}>{placeData.placeName}</h1>
+        <h1 className={styles.page_title}>{placeData.name}</h1>
 
         {/* Slideshow */}
+        {placeData.images && placeData.images.length > 0 && (
+        <div className={styles.slideshow}>
+            <img
+            src={`http://localhost:5000/${placeData.images[currentIndex]}`} 
+            alt={`${placeData.name} slideshow`}
+            className={styles.slide_image}
+            />
+        </div>
+        )}
 
         <div className={styles.vcontent} style={{ color: "#0056b3" , marginTop: "20px", textAlign: "center" }}>
-            <h1>Explore {placeData.placeName}</h1>
+            <h1>Explore {placeData.name}</h1>
             <p>{placeData.description}</p>
         </div>
       

@@ -202,7 +202,7 @@ app.get("/adminhome", (req, res) => {
   });
 });
 
-// Route to insert place + related data
+// ✅ Route to insert place + related data
 app.post("/places", upload.array("images"), (req, res) => {
   let { placeName, description, packages, inclusions, exclusions } = req.body;
 
@@ -217,6 +217,7 @@ app.post("/places", upload.array("images"), (req, res) => {
 
   // Insert into places table first
   const placeQuery = "INSERT INTO places (name, description) VALUES (?, ?)";
+  console.log("Inserting place:", placeQuery);
   db.query(placeQuery, [placeName, description], (err, result) => {
     if (err) return res.status(500).json({ error: err });
     const placeId = result.insertId;
@@ -265,6 +266,71 @@ app.post("/places", upload.array("images"), (req, res) => {
       });
 
     res.json({ message: "Place added successfully", placeId });
+  });
+});
+
+// ✅ Get place details by name (with images, packages, inclusions, exclusions)
+app.get("/places/:placeName", (req, res) => {
+  const placeName = req.params.placeName.replace(/-/g, " ");
+
+  // Fetch main place info
+  db.query("SELECT * FROM places WHERE LOWER(name) = LOWER(?)", [placeName], (err, placeResults) => {
+    if (err) return res.status(500).json({ error: err });
+    if (placeResults.length === 0) return res.status(404).json({ message: "Place not found" });
+
+    const place = placeResults[0];
+
+    // Fetch images
+    db.query("SELECT image_url FROM place_images WHERE place_id = ?", [place.id], (err, imageResults) => {
+      if (err) return res.status(500).json({ error: err });
+
+      // Fetch packages
+      db.query("SELECT title AS heading, description, price FROM packages WHERE place_id = ?", [place.id], (err, packageResults) => {
+        if (err) return res.status(500).json({ error: err });
+
+        // Fetch inclusions
+        db.query("SELECT item FROM inclusions WHERE place_id = ?", [place.id], (err, inclusionResults) => {
+          if (err) return res.status(500).json({ error: err });
+
+          // Fetch exclusions
+          db.query("SELECT item FROM exclusions WHERE place_id = ?", [place.id], (err, exclusionResults) => {
+            if (err) return res.status(500).json({ error: err });
+
+            // Combine into one JSON object
+            res.json({
+              name: place.name,
+              description: place.description,
+              images: imageResults.map(i => i.image_url),
+              packages: packageResults, // already objects with heading, description, price
+              inclusions: inclusionResults.map(i => i.item),
+              exclusions: exclusionResults.map(i => i.item)
+            });
+          });
+        });
+      });
+    });
+  });
+});
+
+// ✅ Fetch all places with main image (for listing)
+app.get("/places", (req, res) => {
+  const query = `
+    SELECT p.id,p.name,(
+    SELECT pi.image_url FROM place_images pi WHERE pi.place_id = p.id LIMIT 1) AS image_url
+    FROM places p
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) return res.status(500).json({ error: err });
+
+    // Map results so each place has one representative image
+    const places = results.map(row => ({
+      id: row.id,
+      name: row.name,
+      image_url: row.image_url ? `http://localhost:5000/${row.image_url}` : null
+    }));
+
+    res.json(places);
   });
 });
 
