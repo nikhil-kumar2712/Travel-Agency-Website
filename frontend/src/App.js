@@ -13,6 +13,7 @@ import Kerala from "./pages/kerala.js";
 import HomeAfterSignIn from "./pages/HomeAfterSignIn";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import AdminHome from "./pages/AdminHome";
+import PlacesPage from "./pages/PlacesPage";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/kerala" element={<Kerala />} />
           <Route path="/homeaftersignin" element={<ProtectedRoute><HomeAfterSignIn /></ProtectedRoute>} />
           <Route path="/adminhome" element={<ProtectedRoute><AdminHome /></ProtectedRoute>} />
+          <Route path="/placespage" element={<PlacesPage />} />
         </Routes>
     </Router>
   );
