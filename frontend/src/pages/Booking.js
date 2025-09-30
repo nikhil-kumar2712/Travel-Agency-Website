@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect,useState } from "react";
 import styles from "../css-modules/booking.module.css";
 
 function Booking() {
@@ -26,6 +26,16 @@ function Booking() {
   // 2️⃣ State for form & price
   const [formData, setFormData] = useState(initialFormState);
   const [price, setPrice] = useState(0);
+
+  const [availablePlaces, setAvailablePlaces] = useState([]);
+  const [selectedPackages, setSelectedPackages] = useState({});
+
+  useEffect(() => {
+    fetch("http://localhost:5000/places-with-packages") // create a backend endpoint that returns places + their packages
+      .then(res => res.json())
+      .then(data => setAvailablePlaces(data))
+      .catch(err => console.error(err));
+  }, []);
 
   // handle input changes
   const handleChange = (e) => {
@@ -55,47 +65,133 @@ function Booking() {
     }
   };
 
+  const travelModePrices = {
+    Air: 2000,   // extra cost per traveller
+    Train: 1000,
+    Road: 500,
+  };
+
+  const AccomodationTypePrices = {
+    "5_star": 2000,   // extra cost per traveller
+    "3_star": 1000,
+    budget: 500,
+  };
+
+  const MealPrices= {
+    breakfast: 500,
+    "half-board": 1000,
+    "full-board": 1500,
+  }
+
+  function parsePrice(priceString) {
+    if (!priceString) return 0;
+    // Remove ₹ , /- , commas, per person etc.
+    const numeric = priceString.replace(/[₹,/-]|per person/gi, "").trim();
+    return parseInt(numeric) || 0;
+  }
+
   // simple dynamic price calculation
-  React.useEffect(() => {
-    let basePrice = 5000; // base package price per person
-    let travellers = parseInt(formData.tno);
+  useEffect(() => {
+    let totalPrice = 0;
+    const travellers = parseInt(formData.tno || 1);
 
-    // add cost per destination
-    basePrice += formData.destination.length * 2000;
+    formData.destination.forEach((destName) => {
+      const place = availablePlaces.find(p => p.name === destName);
+      if (!place) return;
 
-    // accommodation multiplier
-    if (formData.accommodation === "5-star") basePrice *= 1.5;
-    if (formData.accommodation === "budget") basePrice *= 0.8;
+      const selectedPkgId = selectedPackages[destName];
+      const pkg = place.packages.find(p => p.id === selectedPkgId);
 
-    // add cost per activity
-    basePrice += formData.activities.length * 1000;
+      if (pkg) {
+        const pkgPrice = parsePrice(pkg.price);
+        totalPrice += pkgPrice * travellers; // package cost is per person
+      }
+    });
 
-    // meal plan
-    if (formData.meals === "half-board") basePrice += 1000;
-    if (formData.meals === "full-board") basePrice += 2000;
+    // Add travel mode cost per traveller
+    const travelCost = travelModePrices[formData.travel] || 0;
+    totalPrice += travelCost * travellers;
 
-    // multiply by number of travellers
-    setPrice(basePrice * travellers);
-  }, [formData]);
+    // Add accomodation type cost per traveller
+    const accomodationCost = AccomodationTypePrices[formData.accommodation] || 0;
+    totalPrice += accomodationCost * travellers;
+
+    // Add meals cost per traveller
+    const mealCost = MealPrices[formData.meals] || 0;
+    totalPrice += mealCost * travellers;
+
+    // Multiply by number of travellers
+    totalPrice *= travellers;
+
+    setPrice(totalPrice);
+  }, [formData.destination, selectedPackages, formData.tno, formData.travel, formData.accommodation, formData.meals, availablePlaces]);
+
+  useEffect(() => {
+    if (!formData.ldate) return;
+
+    let totalDays = 0;
+
+    formData.destination.forEach(destName => {
+      const place = availablePlaces.find(p => p.name === destName);
+      if (!place) return;
+
+      const selectedPkgId = selectedPackages[destName];
+      const pkg = place.packages.find(p => p.id === selectedPkgId);
+
+      if (!pkg) {
+        totalDays += 1; // default 1 day if no package selected
+      } else {
+        const match = pkg.title.match(/(\d+)\s*Day/);
+        if (match) {
+          totalDays += parseInt(match[1]);
+        } else {
+          totalDays += 1; // fallback if title doesn't have days
+        }
+      }
+    });
+
+    if (totalDays > 0) {
+      const leavingDate = new Date(formData.ldate);
+      leavingDate.setDate(leavingDate.getDate() + totalDays);
+
+      // Format date in YYYY-MM-DD without timezone issues
+      const year = leavingDate.getFullYear();
+      const month = String(leavingDate.getMonth() + 1).padStart(2, "0");
+      const day = String(leavingDate.getDate()).padStart(2, "0");
+
+      setFormData(prev => ({ ...prev, rdate: `${year}-${month}-${day}` }));
+    }
+  }, [formData.ldate, formData.destination, selectedPackages, availablePlaces]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const userId = storedUser?.id;
 
+    // Transform selectedPackages for API
+    const formattedPackages = formData.destination.map((placeName) => {
+      const pkgId = selectedPackages[placeName];
+      const place = availablePlaces.find((p) => p.name === placeName);
+      const pkg = place.packages.find((p) => p.id === pkgId);
+
+      return {
+        placeName,
+        packageId: pkg?.id || null,
+        packageTitle: pkg?.title || "",
+      };
+    });
+
     const bookingData = {
       userId,
       price,
-      ...formData
+      ...formData,
+      selectedPackages: formattedPackages, // send in the required format
     };
-
 
     try {
       const res = await fetch("http://localhost:5000/bookings", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),
       });
 
@@ -104,10 +200,10 @@ function Booking() {
         alert("Booking submitted successfully!");
         console.log("Booking ID:", data.bookingId);
 
-        // ✅ Clear form
+        // Clear form
         setFormData(initialFormState);
+        setSelectedPackages({});
       } else {
-        const data = await res.json();
         alert(`❌ ${data.error}`);
       }
     } catch (err) {
@@ -116,12 +212,11 @@ function Booking() {
     }
   };
 
-
   return (
     <div
       style={{
         backgroundImage: "url('/assets/booking background.webp')",
-        backgroundSize: "1600px 1400px",
+        backgroundSize: "1600px 100%",
         minHeight: "100vh",
       }}
     >
@@ -166,46 +261,70 @@ function Booking() {
                 onChange={handleChange}
               />
 
-              <label htmlFor="tno">Number of travellers</label>
-              <select id="tno" name="tno" required onChange={handleChange}>
-                <option value="1">One person</option>
-                <option value="2">Two persons</option>
-                <option value="3">Three persons</option>
-                <option value="4">Four persons</option>
-                <option value="5">Five persons</option>
-              </select>
+              <label htmlFor="tno">Number of travellers (maximum 20 allowed) </label>
+              <input
+                type="number"
+                id="tno"
+                name="tno"
+                min="1"
+                max="20" // set a sensible max limit
+                placeholder="Enter number of travellers"
+                required
+                value={formData.tno}
+                onChange={handleChange}
+              />
 
-              <label htmlFor="destination">Destinations</label>
+              <label htmlFor="destination">Destinations & Packages</label>
               <div className={styles.destinationsBox}>
-                {[
-                  "Agra",
-                  "Pune",
-                  "New Delhi",
-                  "Somnath",
-                  "Goa",
-                  "Kerela",
-                  "Srinagar",
-                  "Jaipur",
-                  "Ayodhya",
-                ].map((city) => (
-                  <label key={city} className={styles.destinationItem}>
-                    <input
-                      type="checkbox"
-                      name="destination"
-                      value={city}
-                      checked={formData.destination.includes(city)}
-                      onChange={(e) => {
-                        let updatedDest = [...formData.destination];
-                        if (e.target.checked) {
-                          updatedDest.push(city);
-                        } else {
-                          updatedDest = updatedDest.filter((item) => item !== city);
+                {availablePlaces.map((place) => (
+                  <div key={place.id} className={styles.destinationItem}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="destination"
+                        value={place.name}
+                        checked={formData.destination.includes(place.name)}
+                        onChange={(e) => {
+                          let updatedDest = [...formData.destination];
+                          let updatedPackages = { ...selectedPackages };
+
+                          if (e.target.checked) {
+                            updatedDest.push(place.name);
+                            // set default package if not already selected
+                            if (!updatedPackages[place.name] && place.packages.length > 0) {
+                              updatedPackages[place.name] = place.packages[0].id;
+                            }
+                          } else {
+                            updatedDest = updatedDest.filter((item) => item !== place.name);
+                            delete updatedPackages[place.name];
+                          }
+
+                          setFormData({ ...formData, destination: updatedDest });
+                          setSelectedPackages(updatedPackages);
+                        }}
+                      />
+                      {place.name}
+                    </label>
+
+                    {/* Package selector */}
+                    {formData.destination.includes(place.name) && (
+                      <select
+                        value={selectedPackages[place.name] || ""}
+                        onChange={(e) =>
+                          setSelectedPackages({
+                            ...selectedPackages,
+                            [place.name]: parseInt(e.target.value),
+                          })
                         }
-                        setFormData({ ...formData, destination: updatedDest });
-                      }}
-                    />
-                    {city}
-                  </label>
+                      >
+                        {place.packages.map((pkg) => (
+                          <option key={pkg.id} value={pkg.id}>
+                            {pkg.title} ({pkg.price})
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
                 ))}
               </div>
 
@@ -267,16 +386,21 @@ function Booking() {
               />
 
               <label htmlFor="ldate">Leaving On</label>
-              <input type="date" id="ldate" name="ldate" required onChange={handleChange} />
-
-              <label htmlFor="rdate">Returning On</label>
-              <input type="date" id="rdate" name="rdate" required onChange={handleChange} />
+              <input
+                type="date"
+                id="ldate"
+                name="ldate"
+                required
+                onChange={(e) => {
+                  setFormData({ ...formData, ldate: e.target.value });
+                }}
+              />
 
               {/* New Add-ons */}
               <label htmlFor="accommodation">Accommodation Type</label>
               <select id="accommodation" name="accommodation" onChange={handleChange}>
-                <option value="3-star">3-Star</option>
-                <option value="5-star">5-Star</option>
+                <option value="3_star">3-Star</option>
+                <option value="5_star">5-Star</option>
                 <option value="budget">Budget Stay</option>
               </select>
 
@@ -319,7 +443,7 @@ function Booking() {
               <textarea
                 id="customRequests"
                 name="customRequests"
-                placeholder="Mention any changes, add-ons or preferences you’d like in your package..."
+                placeholder="Mention any changes, add-ons or preferences you’d like in your package (Extra charges would be aplicable)..."
                 style={{ height: "100px" }}
                 onChange={handleChange}
               />
@@ -339,7 +463,10 @@ function Booking() {
 
               {/* Dynamic Price */}
               <div style={{ marginTop: "20px", fontSize: "18px", fontWeight: "bold" }}>
-                Estimated Price: ₹{price.toLocaleString("en-IN")}
+                Estimated Price: ₹{price.toLocaleString("en-IN")}{" "}
+                <span style={{ fontSize: "12px", fontWeight: "normal" }}>
+                  *Approx value (May change based on custom requests)
+                </span>
               </div>
 
               <input type="submit" value="Submit" style={{ marginTop: "10px" }} />

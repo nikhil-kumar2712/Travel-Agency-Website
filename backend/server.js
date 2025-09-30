@@ -120,6 +120,7 @@ app.post("/bookings", (req, res) => {
     lastname,
     tno,
     destination,
+    selectedPackages, // new field from frontend
     pickup,
     drop,
     travel,
@@ -138,21 +139,22 @@ app.post("/bookings", (req, res) => {
 
   const query = `
     INSERT INTO bookings (
-      user_id, firstname, lastname, tno, destination, pickup, droped, travel, 
-      cno, email, ano, ldate, rdate, accommodation, activities, meals, 
-      customRequests, callback, price
+      user_id, firstname, lastname, tno, destination, selectedPackages,
+      pickup, droped, travel, cno, email, ano, ldate, rdate,
+      accommodation, activities, meals, customRequests, callback, price
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
-    db.query(
+  db.query(
     query,
     [
       userId,
       firstname,
       lastname,
       tno,
-      JSON.stringify(destination), // store array as JSON
+      JSON.stringify(destination),
+      JSON.stringify(selectedPackages), // store package info
       pickup,
       drop,
       travel,
@@ -162,7 +164,7 @@ app.post("/bookings", (req, res) => {
       ldate,
       rdate,
       accommodation,
-      JSON.stringify(activities), // store array as JSON
+      JSON.stringify(activities),
       meals,
       customRequests,
       callback,
@@ -182,12 +184,31 @@ app.post("/bookings", (req, res) => {
 app.get("/bookings/:userId", (req, res) => {
   const userId = req.params.userId;
 
-  db.query("SELECT * FROM bookings WHERE user_id = ?", [userId], (err, results) => {
+  const query = "SELECT * FROM bookings WHERE user_id = ?";
+  db.query(query, [userId], (err, results) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Error fetching bookings" });
     }
-    res.json(results);
+
+    const safeParse = (value, fallbackArray = false) => {
+      if (!value) return fallbackArray ? [] : {};
+      try {
+        return JSON.parse(value);
+      } catch {
+        return fallbackArray ? [value] : {};
+      }
+    };
+
+    const parsedResults = results.map((booking) => ({
+      ...booking,
+      destination: safeParse(booking.destination, true),     // always array
+      activities: safeParse(booking.activities, true),       // always array
+      selectedPackages: safeParse(booking.selectedPackages, true),  
+      callback: !!booking.callback,                          // ensure boolean
+    }));
+
+    res.json(parsedResults);
   });
 });
 
@@ -198,7 +219,24 @@ app.get("/adminhome", (req, res) => {
       console.error(err);
       return res.status(500).json({ error: "Error fetching bookings" });
     }
-    res.json(results);
+
+    const safeParse = (value, fallbackArray = false) => {
+      if (!value) return fallbackArray ? [] : {};
+      try {
+        return JSON.parse(value);
+      } catch {
+        return fallbackArray ? [value] : {};
+      }
+    };
+
+    const parsedResults = results.map((booking) => ({
+      ...booking,
+      destination: safeParse(booking.destination, true),     // always array
+      activities: safeParse(booking.activities, true),       // always array
+      selectedPackages: safeParse(booking.selectedPackages, true),            // ensure boolean
+    }));
+
+    res.json(parsedResults);
   });
 });
 
@@ -331,6 +369,42 @@ app.get("/places", (req, res) => {
     }));
 
     res.json(places);
+  });
+});
+
+// ✅ GET /places-with-packages
+app.get("/places-with-packages", (req, res) => {
+  // Step 1: Fetch all places
+  const placeQuery = "SELECT id, name FROM places";
+
+  db.query(placeQuery, (err, places) => {
+    if (err) return res.status(500).json({ error: err });
+
+    if (places.length === 0) return res.json([]);
+
+    // Step 2: For each place, fetch its packages
+    const placeIds = places.map(p => p.id);
+    const packageQuery = `
+      SELECT id, place_id, title, price
+      FROM packages
+      WHERE place_id IN (?)
+    `;
+
+    db.query(packageQuery, [placeIds], (err, packages) => {
+      if (err) return res.status(500).json({ error: err });
+
+      // Step 3: Attach packages to their respective place
+      const result = places.map(place => {
+        const placePackages = packages.filter(pkg => pkg.place_id === place.id);
+        return {
+          id: place.id,
+          name: place.name,
+          packages: placePackages
+        };
+      });
+
+      res.json(result);
+    });
   });
 });
 

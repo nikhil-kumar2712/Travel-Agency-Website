@@ -63,6 +63,7 @@
   border-bottom: 1px solid #ddd;
   font-size: 0.95rem;
   color: #555;
+  white-space: nowrap;
 }
 
 /* Price cell highlight */

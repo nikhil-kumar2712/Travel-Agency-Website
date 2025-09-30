@@ -329,7 +329,7 @@ function AdminPanel() {
                   <th>User ID</th>
                   <th>First Name</th>
                   <th>Last Name</th>
-                  <th>Destinations</th>
+                  <th>Destinations & Packages</th>
                   <th>Travellers</th>
                   <th>Pickup Location</th>
                   <th>Drop Location</th>
@@ -358,7 +358,20 @@ function AdminPanel() {
                     <td>{b.user_id}</td>  
                     <td>{b.firstname}</td>
                     <td>{b.lastname}</td>
-                    <td>{Array.isArray(b.destination) ? b.destination.join(", ") : b.destination}</td>
+                    <td>
+                      {Array.isArray(b.destination)
+                        ? b.destination.flat().map((placeName, idx) => {
+                            const nestedPackages = b.selectedPackages?.[0] || [];
+                            const pkg = nestedPackages.find((p) => p.placeName === placeName);
+
+                            return (
+                              <div key={idx}>
+                                {placeName} {pkg ? `(${pkg.packageTitle})` : ""}
+                              </div>
+                            );
+                          })
+                        : b.destination}
+                    </td>
                     <td>{b.tno}</td>
                     <td>{b.pickup}</td>
                     <td>{b.droped}</td>
@@ -373,7 +386,7 @@ function AdminPanel() {
                     <td style={{ whiteSpace: "nowrap" }}>
                       {formatDate(b.ldate)} - {formatDate(b.rdate)}
                     </td>
-                    <td>{b.callback}</td>
+                    <td>{b.callback ? "Yes" : "No"}</td>
                     <td className={bookingstyles.price}>
                       ₹{Number(b.price).toLocaleString("en-IN")}
                     </td>
