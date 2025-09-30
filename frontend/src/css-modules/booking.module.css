@@ -125,31 +125,48 @@ input[type=file] {
 }
 
 /* Container for all the destination checkboxes */
+/* Container for all destinations */
 .destinationsBox {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 16px;
-  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* space between each destination item */
+  margin-bottom: 20px;
 }
 
-/* Each checkbox + label */
+/* Individual destination item */
 .destinationItem {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: #333;
+  flex-direction: column; /* stack checkbox and dropdown */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fafafa;
+  max-width: 400px; /* optional, restrict width */
 }
 
-.destinationItem input[type="checkbox"] {
-  accent-color: #04AA6D; /* custom color for checkboxes */
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
+/* Label for checkbox */
+.destinationItem label {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between checkbox and text */
+  font-weight: 500;
+}
+
+/* Dropdown for package selection */
+.destinationItem select {
+  margin-top: 8px; /* space from checkbox */
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%; /* take full width of destination item */
+  max-width: 300px; /* optional max width */
+  background-color: #fff;
+}
+
+/* Optional: hover effect for destination items */
+.destinationItem:hover {
+  background-color: #f0f8ff;
 }
 
 /* Container for all the activity checkboxes */

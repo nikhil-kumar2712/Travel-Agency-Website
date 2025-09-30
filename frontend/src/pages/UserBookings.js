@@ -30,19 +30,20 @@ function MyBookings() {
   // ✅ Format date (remove time)
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    // DB may give "YYYY-MM-DDTHH:MM:SS" or "YYYY-MM-DD HH:MM:SS"
     return dateString.split("T")[0].split(" ")[0];
   };
 
   if (loading) return <p style={{ textAlign: "center" }}>Loading bookings...</p>;
 
   return (
-    <div style={{
+    <div
+      style={{
         backgroundImage: "url('/assets/background.webp')",
         backgroundSize: "1600px 800px",
         minHeight: "100vh",
-      }} 
-      className={styles.pageWrapper}>
+      }}
+      className={styles.pageWrapper}
+    >
       <h2 className={styles.title}>My Bookings</h2>
       {bookings.length === 0 ? (
         <p style={{ textAlign: "center", marginTop: "20px" }}>No bookings yet.</p>
@@ -52,9 +53,9 @@ function MyBookings() {
             <thead>
               <tr>
                 <th>Booking ID</th>
-                <th>Destinations</th>
+                <th>Destinations & Packages</th>
                 <th>Travellers</th>
-                <th>Travel Mode</th>  
+                <th>Travel Mode</th>
                 <th>Pickup Location</th>
                 <th>Drop Location</th>
                 <th>Accommodation</th>
@@ -65,10 +66,24 @@ function MyBookings() {
               </tr>
             </thead>
             <tbody>
-              {bookings.map((b) => (
+              {bookings.map((b) => {
+                return (
                 <tr key={b.id}>
                   <td>{b.id}</td>
-                  <td>{Array.isArray(b.destination) ? b.destination.join(", ") : b.destination}</td>
+                  <td>
+                    {Array.isArray(b.destination)
+                      ? b.destination.flat().map((placeName, idx) => {
+                          const nestedPackages = b.selectedPackages?.[0] || [];
+                          const pkg = nestedPackages.find((p) => p.placeName === placeName);
+
+                          return (
+                            <div key={idx}>
+                              {placeName} {pkg ? `(${pkg.packageTitle})` : ""}
+                            </div>
+                          );
+                        })
+                      : b.destination}
+                  </td>
                   <td>{b.tno}</td>
                   <td>{b.travel}</td>
                   <td>{b.pickup}</td>
@@ -83,7 +98,8 @@ function MyBookings() {
                     ₹{Number(b.price).toLocaleString("en-IN")}
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>

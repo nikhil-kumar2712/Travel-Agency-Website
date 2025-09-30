@@ -92,9 +92,6 @@ function HeaderAfterSignIn() {
               <a href="/userbookings" style={{ whiteSpace: "nowrap" }}>My Bookings</a>
             </li>
             <li>
-              <a href="/about">About</a>
-            </li>
-            <li>
               <a href="/contact" style={{ whiteSpace: "nowrap" }}>Contact Us</a>
             </li>
             <li
