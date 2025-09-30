@@ -47,7 +47,7 @@ export default function HeroSlides() {
           <div className="content">
             <span>Explore , Discover , Travel</span>
             <h3>Travel around the world</h3>
-            <a href="places.html" className="btn">Discover More</a>
+            <a href="/places" className="btn">Discover More</a>
           </div>
         </div>
       ))}

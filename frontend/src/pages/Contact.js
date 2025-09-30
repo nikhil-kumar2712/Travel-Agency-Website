@@ -2,6 +2,32 @@ import React from "react";
 import styles from "../css-modules/contact.module.css";
 
 function Contact() {
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      firstname: e.target.firstname.value,
+      lastname: e.target.lastname.value,
+      email: e.target.email.value,
+      subject: e.target.subject.value,
+    };
+
+    try {
+      const res = await fetch("http://localhost:5000/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      alert(data.message);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send message.");
+    }
+  };
+
   return (
     <div
       style={{
@@ -31,7 +57,7 @@ function Contact() {
 
         <div className={styles.row}>
           <div className={styles.column}>
-            <form>
+            <form onSubmit={handleSubmit}>
               <label htmlFor="fname">First Name</label>
               <input type="text" id="fname" name="firstname" placeholder="Enter Your first name.." required />
 
