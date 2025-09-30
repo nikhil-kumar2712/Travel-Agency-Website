@@ -168,6 +168,11 @@ function Booking() {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const userId = storedUser?.id;
 
+    if (!userId) {
+      alert("Please sign in or sign up first to submit a booking.");
+      return; // stop further execution
+    }
+
     // Transform selectedPackages for API
     const formattedPackages = formData.destination.map((placeName) => {
       const pkgId = selectedPackages[placeName];

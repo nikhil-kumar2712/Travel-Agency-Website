@@ -1,3 +1,4 @@
+const nodemailer = require("nodemailer");
 const express = require("express");
 const mysql = require("mysql2");
 const bcrypt = require("bcryptjs");
@@ -406,6 +407,36 @@ app.get("/places-with-packages", (req, res) => {
       res.json(result);
     });
   });
+});
+
+// POST endpoint to handle contact form submissions
+app.post("/contact", async (req, res) => {
+  const { firstname, lastname, email, subject } = req.body;
+
+  // Set up your transporter (SMTP details)
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "nikhilkumar111076@gmail.com",  // your Gmail
+      pass: "uzwv xitl apca xzhe",       // generate an App Password from Google
+    },
+  });
+
+  // Compose the mail
+  const mailOptions = {
+    from: email,                  // sender: the email entered in the form
+    to: "nikhilkumar6778op@gmail.com",// recipient: your fixed email
+    subject:"User Querries from Contact Form",
+    text: `Name: ${firstname} ${lastname}\nEmail: ${email}\n\nMessage:\n${subject}`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.json({ message: "Message sent successfully!" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to send message." });
+  }
 });
 
 app.listen(5000, () => console.log("🚀 Server running on port 5000"));
