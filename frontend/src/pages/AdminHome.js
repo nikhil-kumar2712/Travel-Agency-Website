@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AdminHeader from "../components/adminheader";
 import styles from "../css-modules/adminhome.module.css";
 import bookingstyles from "../css-modules/userbooking.module.css";
+import placestyles from "../css-modules/addplaces.module.css";
 
 function AdminPanel() {
   const navigate = useNavigate();
@@ -16,8 +17,10 @@ function AdminPanel() {
   const [images, setImages] = useState([]);
   const [packages, setPackages] = useState([{ heading: "", description: "", price: "" },]);
   const [existingPlaces, setExistingPlaces] = useState([]);
+  const [placeData, setPlaceData] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // ✅ Format date (remove time)
+  // Format date (remove time)
   const formatDate = (dateString) => {
     if (!dateString) return "";
     // DB may give "YYYY-MM-DDTHH:MM:SS" or "YYYY-MM-DD HH:MM:SS"
@@ -122,6 +125,45 @@ function AdminPanel() {
     alert("Place uploaded successfully!");
   };
 
+  const handleSubmitedit = async (e) => {
+    e.preventDefault();
+
+    if (!placeData) return;
+
+    try {
+      const formData = new FormData();
+
+      // ✅ Add basic fields
+      formData.append("placename", placeData.name)
+      formData.append("description", placeData.description);
+      formData.append("packages", JSON.stringify(placeData.packages));
+      formData.append("inclusions", JSON.stringify(placeData.inclusions));
+      formData.append("exclusions", JSON.stringify(placeData.exclusions));
+
+      // Append all images (both new File objects and existing images paths)
+      placeData.images.forEach((img) => {
+        // If the img is a File object → newly added
+        if (img instanceof File) {
+          formData.append("images", img);
+        } else {
+          // If string → existing image path stored in DB
+          formData.append("existingImages[]", img);
+        }
+      });
+
+      await fetch(`http://localhost:5000/places/${placeData.id}`,{
+        method: "POST",
+        body: formData
+      });
+
+      alert("✅ Place updated successfully!");
+      console.log(formData);
+    } catch (err) {
+      console.error("❌ Error updating place:", err);
+      alert("Error updating place. Check console for details.");
+    }
+  };
+
   return (
     <div
       style={{
@@ -143,6 +185,14 @@ function AdminPanel() {
             onClick={() => setActiveSection("add-place")}
           >
             Add Places
+          </button>
+          <button
+            className={`${styles.toggleBtn} ${
+              activeSection === "edit-place" ? styles.active : ""
+            }`}
+            onClick={() => setActiveSection("edit-place")}
+          >
+            Edit Places
           </button>
           <button
             className={`${styles.toggleBtn} ${
@@ -292,6 +342,392 @@ function AdminPanel() {
               Add Place
             </button>
           </form>
+        </div>
+      </section>
+
+      <section
+        id="edit-place"
+        style={{ display: activeSection === "edit-place" ? "block" : "none" }}
+      >
+        <div className={styles.pageWrapper}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h2 style={{ marginLeft: "535px" , paddingBottom: "30px" }} className={styles.title}>Select the place to edit</h2>   
+          </div>
+          <div style={{ marginBottom: "0px", textAlign: "center" }}>
+            <label style={{ fontWeight: "bold", marginRight: "10px" }}>
+              Existing Places:
+            </label>
+            <select
+              onChange={async (e) => {
+                const placename = e.target.value;
+                if (!placename) {
+                  setPlaceData(null);
+                  return;
+                }
+                try {
+                  const res = await fetch(`http://localhost:5000/places/${encodeURIComponent(placename)}`);
+                  const data = await res.json();
+                  setPlaceData(data);
+                } catch (err) {
+                  console.error("Error fetching place data:", err);
+                }
+              }}
+              style={{ padding: "5px", width: "300px", textAlign: "center" }}
+            >
+              <option value="">-- List of all already available places --</option>
+              {existingPlaces.map((place) => (
+                <option key={place.id} value={place.name}>
+                  {place.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          {placeData && ( <form onSubmit={handleSubmitedit} encType="multipart/form-data">
+            <div 
+              style={{
+                backgroundImage: "url('/assets/background.webp')",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                minHeight: "100vh",
+                padding: "10px",
+                borderRadius: "10px"
+              }}
+              className={placestyles.container}>
+
+              {/* Title */}
+              <input
+                type="text"
+                value={placeData.name}
+                onChange={(e) => setPlaceData({ ...placeData, name: e.target.value })}
+                style={{
+                  margin:"20px 610px",
+                  width:"12%",
+                  background: "white",
+                  textAlign: "center",
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                  color: "#333",
+                }}
+              />
+
+              {/* Slideshow */}
+              {placeData.images && placeData.images.length > 0 && (
+              <div className={placestyles.slideshow} style={{ marginTop: "40px" }}>
+                <div style={{ position: "relative" }}>
+                  <img
+                    src={
+                      placeData.images[currentIndex] instanceof File
+                        ? URL.createObjectURL(placeData.images[currentIndex]) // ✅ preview for new file
+                        : `http://localhost:5000/${placeData.images[currentIndex]}` // ✅ already saved image
+                    }
+                    alt={`slide-${currentIndex}`}
+                    className={placestyles.slide_image}
+                    style={{ width: "1200px", borderRadius: "8px" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const updatedImgs = [...placeData.images];
+                      updatedImgs.splice(currentIndex, 1);
+                      setPlaceData({ ...placeData, images: updatedImgs });
+                      setCurrentIndex((prev) => (prev > 0 ? prev - 1 : 0));
+                    }}
+                    style={{
+                      position: "absolute",
+                      top: "10px",
+                      right: "10px",
+                      background: "red",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "50%",
+                      cursor: "pointer",
+                      width: "30px",
+                      height: "30px",
+                      fontSize: "16px",
+                    }}
+                  >
+                    ✕
+                  </button>
+                  {/* Prev Button */}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentIndex((prev) => (prev === 0 ? placeData.images.length - 1 : prev - 1))}
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "10px",
+                      transform: "translateY(-50%)",
+                      background: "rgba(0,0,0,0.5)",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "50%",
+                      cursor: "pointer",
+                      width: "40px",
+                      height: "40px",
+                    }}
+                  >
+                    ◀
+                  </button>
+
+                  {/* Next Button */}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentIndex((prev) => (prev === placeData.images.length - 1 ? 0 : prev + 1))}
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      right: "10px",
+                      transform: "translateY(-50%)",
+                      background: "rgba(0,0,0,0.5)",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "50%",
+                      cursor: "pointer",
+                      width: "40px",
+                      height: "40px",
+                    }}
+                  >
+                    ▶
+                  </button>
+                </div>
+              </div>
+              )}
+              <input
+                type="file"
+                style={{
+                  marginTop: "20px",
+                  background: "rgb(225 193 255)",
+                  border: "none",
+                  padding:"5px 5px",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  margin:"20px 560px"
+                }}
+                accept="image/*"
+                multiple
+                onChange={(e) => {
+                  const files = Array.from(e.target.files);
+                  setPlaceData({ ...placeData, images: [...placeData.images, ...files] });
+                  setCurrentIndex(placeData.images.length); // Show newly added image
+                }}
+              />
+
+              <div className={placestyles.vcontent} style={{ color: "#0056b3" , marginTop: "20px", textAlign: "center" }}>
+                  <h1>Explore {placeData.name}</h1>
+                  <textarea
+                    value={placeData.description}
+                    onChange={(e) => setPlaceData({ ...placeData, description: e.target.value })}
+                    style={{
+                      width: "80%",
+                      minHeight: "50px",
+                      marginTop: "10px",
+                      padding: "10px",
+                      borderRadius: "5px",
+                    }}
+                  />
+              </div>
+            
+              {/* Packages */}
+              <section>
+                  <h2 className={placestyles.section_title}>Our Packages</h2>
+                  <div className={placestyles.packages_container}>
+                      {placeData.packages.map((pkg, idx) => (
+                      <div key={idx} className={placestyles.package_card}>
+                        <input
+                          type="text"
+                          value={pkg.heading}
+                          onChange={(e) => {
+                            const updated = [...placeData.packages];
+                            updated[idx].heading = e.target.value;
+                            setPlaceData({ ...placeData, packages: updated });
+                          }}
+                        />
+                        <textarea
+                          value={pkg.description}
+                          onChange={(e) => {
+                            const updated = [...placeData.packages];
+                            updated[idx].description = e.target.value;
+                            setPlaceData({ ...placeData, packages: updated });
+                          }}
+                        />
+                        <input
+                          type="text"
+                          value={pkg.price}
+                          onChange={(e) => {
+                            const updated = [...placeData.packages];
+                            updated[idx].price = e.target.value;
+                            setPlaceData({ ...placeData, packages: updated });
+                          }}
+                        /><button
+                          type="button"
+                          style={{
+                            padding: "5px 10px",
+                            background: "rgb(225 193 255)",
+                            color: "#000000ff",
+                            border: "none",
+                            marginLeft:"75px",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            const updated = [...placeData.packages];
+                            updated.splice(idx, 1);
+                            setPlaceData({ ...placeData, packages: updated });
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      style={{
+                      padding: "20px 20px",
+                      background: "#ffffffff",
+                      color: "#000000ff",
+                      border: "none",
+                      borderRadius: "10px",
+                      cursor: "pointer",
+                      fontSize: "1rem"
+                    }}
+                      onClick={() =>
+                        setPlaceData({
+                          ...placeData,
+                          packages: [...placeData.packages, { heading: "", description: "", price: "" }],
+                        })
+                      }
+                    >
+                      ➕ Add Package
+                    </button>
+                  </div>
+              </section>
+              
+              {/* Inclusions */}
+              <section>
+                  <h3 className={placestyles.section_subtitle}>Inclusions</h3>
+                  <ul className={placestyles.list}>
+                  {placeData.inclusions.map((inc, i) => (
+                    <li key={i}>
+                      <input
+                        type="text"
+                        value={inc}
+                        onChange={(e) => {
+                          const updated = [...placeData.inclusions];
+                          updated[i] = e.target.value;
+                          setPlaceData({ ...placeData, inclusions: updated });
+                        }}
+                      />
+                      <button
+                          type="button"
+                          style={{
+                            padding: "5px 10px",
+                            background: "rgb(225 193 255)",
+                            color: "#000000ff",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            const updated = [...placeData.inclusions];
+                            updated.splice(i, 1);
+                            setPlaceData({ ...placeData, inclusions: updated });
+                          }}
+                        >
+                          Remove
+                      </button>
+                    </li>
+                  ))}
+                  </ul>
+                  <button
+                    type="button"
+                    style={{
+                      padding: "10px 502px",
+                      background: "#ffffffff",
+                      color: "#000000ff",
+                      marginLeft:"145px",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setPlaceData({ ...placeData, inclusions: [...placeData.inclusions, ""] })}
+                  >
+                    ➕ Add Inclusion
+                  </button>
+              </section>
+
+              {/* Exclusions */}
+              <section>
+                  <h3 className={placestyles.section_subtitle}>Exclusions</h3>
+                  <ul className={placestyles.list}>
+                  {placeData.exclusions.map((exc, i) => (
+                    <li key={i}>
+                      <input
+                        type="text"
+                        value={exc}
+                        onChange={(e) => {
+                          const updated = [...placeData.exclusions];
+                          updated[i] = e.target.value;
+                          setPlaceData({ ...placeData, exclusions: updated });
+                        }}
+                      />
+                      <button
+                          type="button"
+                          style={{
+                            padding: "5px 10px",
+                            background: "rgb(225 193 255)",
+                            color: "#000000ff",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            const updated = [...placeData.exclusions];
+                            updated.splice(i, 1);
+                            setPlaceData({ ...placeData, exclusions: updated });
+                          }}
+                        >
+                          Remove
+                      </button>
+                    </li>
+                  ))}
+                  </ul>
+                  <button
+                    type="button"
+                    style={{
+                      padding: "10px 502px",
+                      background: "#ffffffff",
+                      color: "#000000ff",
+                      marginLeft:"145px",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                      marginBottom:"30px"
+                    }}
+                    onClick={() => setPlaceData({ ...placeData, exclusions: [...placeData.exclusions, ""] })}
+                  >
+                    ➕ Add Exclusion
+                  </button>
+              </section>
+            </div>
+            {/* Submit */}
+            <div style={{ marginTop: "20px", textAlign: "center" }}>
+              <button
+                type="submit"
+                style={{
+                  padding: "10px 20px",
+                  background: "#0056b3",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
+          )}
         </div>
       </section>
 

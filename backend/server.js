@@ -264,7 +264,6 @@ app.post("/places", upload.array("images"), (req, res) => {
    // Insert images
     req.files.forEach((file) => {
       const imgPath = "uploads/" + file.filename;
-      console.log("Inserting image:", imgPath);
       db.query(
         "INSERT INTO place_images (place_id, image_url) VALUES (?, ?)",
         [placeId, imgPath],
@@ -276,7 +275,6 @@ app.post("/places", upload.array("images"), (req, res) => {
 
     // Insert packages
     packages.forEach((pkg) => {
-      console.log("Inserting package:", pkg);
       db.query(
         "INSERT INTO packages (place_id, title, description, price) VALUES (?, ?, ?, ?)",
         [placeId, pkg.heading, pkg.description, pkg.price],
@@ -286,7 +284,6 @@ app.post("/places", upload.array("images"), (req, res) => {
 
     // Insert inclusions
     inclusions.forEach((inc) => {
-      console.log("Inserting inclusion:", inc);
       db.query(
         "INSERT INTO inclusions (place_id, item) VALUES (?, ?)",
         [placeId, inc],
@@ -296,7 +293,6 @@ app.post("/places", upload.array("images"), (req, res) => {
 
     // Insert exclusions
       exclusions.forEach((exc) => {
-        console.log("Inserting exclusion:", exc);
         db.query(
           "INSERT INTO exclusions (place_id, item) VALUES (?, ?)",
           [placeId, exc],
@@ -337,6 +333,7 @@ app.get("/places/:placeName", (req, res) => {
 
             // Combine into one JSON object
             res.json({
+              id: place.id,
               name: place.name,
               description: place.description,
               images: imageResults.map(i => i.image_url),
@@ -409,7 +406,7 @@ app.get("/places-with-packages", (req, res) => {
   });
 });
 
-// POST endpoint to handle contact form submissions
+// ✅ POST endpoint to handle contact form submissions
 app.post("/contact", async (req, res) => {
   const { firstname, lastname, email, subject } = req.body;
 
@@ -437,6 +434,93 @@ app.post("/contact", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Failed to send message." });
   }
+});
+
+// ✅ Update Place + related data
+app.post("/places/:id", upload.array("images"), (req, res) => {
+  const placeId = req.params.id;
+  let { placename, description, packages, inclusions, exclusions } = req.body;
+
+  // Parse JSON strings into real arrays/objects
+  try {
+    packages = JSON.parse(packages || "[]");
+    inclusions = JSON.parse(inclusions || "[]");
+    exclusions = JSON.parse(exclusions || "[]");
+  } catch (err) {
+    return res.status(400).json({ error: "Invalid JSON in request" });
+  }
+
+  // ✅ Update place description
+  const updatePlaceQuery = "UPDATE places SET name = ?,description = ? WHERE id = ?";
+  db.query(updatePlaceQuery, [placename, description, placeId], (err) => {
+    if (err) return res.status(500).json({ error: err });
+
+    // ✅ Update images
+    // Get existing images from DB
+    db.query("SELECT image_url FROM place_images WHERE place_id=?", [placeId], (err, rows) => {
+      if (err) return console.error(err);
+
+      const existingDBImages = rows.map(r => r.image_url);
+      let updatedImages = req.body.existingImages || [];
+      if (!Array.isArray(updatedImages)) updatedImages = [updatedImages]; // single image case
+
+      // Remove images not in updatedImages
+      const imagesToDelete = existingDBImages.filter(img => !updatedImages.includes(img));
+      imagesToDelete.forEach(img => {
+        db.query("DELETE FROM place_images WHERE place_id=? AND image_url=?", [placeId, img], (err) => {
+          if (err) console.error(err);
+        });
+      });
+    });
+
+    // Add new uploaded images
+    req.files.forEach(file => {
+        const imgPath = "uploads/" + file.filename;
+        db.query(
+          "INSERT INTO place_images (place_id, image_url) VALUES (?, ?)",
+          [placeId, imgPath],
+          (err) => { if (err) console.error(err); }
+        );
+    });
+
+    // ✅ Update packages
+    db.query("DELETE FROM packages WHERE place_id = ?", [placeId], (err) => {
+      if (err) console.error(err);
+      packages.forEach((pkg) => {
+        db.query(
+          "INSERT INTO packages (place_id, title, description, price) VALUES (?, ?, ?, ?)",
+          [placeId, pkg.heading, pkg.description, pkg.price],
+          (err) => { if (err) console.error(err); }
+        );
+      });
+    });
+
+    // ✅ Update inclusions
+    db.query("DELETE FROM inclusions WHERE place_id = ?", [placeId], (err) => {
+      if (err) console.error(err);
+      inclusions.forEach((inc) => {
+        db.query(
+          "INSERT INTO inclusions (place_id, item) VALUES (?, ?)",
+          [placeId, inc],
+          (err) => { if (err) console.error(err); }
+        );
+      });
+    });
+
+    // ✅ Update exclusions
+    db.query("DELETE FROM exclusions WHERE place_id = ?", [placeId], (err) => {
+      if (err) console.error(err);
+      exclusions.forEach((exc) => {
+        db.query(
+          "INSERT INTO exclusions (place_id, item) VALUES (?, ?)",
+          [placeId, exc],
+          (err) => { if (err) console.error(err); }
+        );
+      });
+    });
+
+    res.json({ message: "Place updated successfully" });
+  });
 });
 
 app.listen(5000, () => console.log("🚀 Server running on port 5000"));

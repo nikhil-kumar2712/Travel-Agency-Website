@@ -68,19 +68,19 @@ function Booking() {
   const travelModePrices = {
     Air: 2000,   // extra cost per traveller
     Train: 1000,
-    Road: 500,
+    Road: 0,
   };
 
   const AccomodationTypePrices = {
     "5_star": 2000,   // extra cost per traveller
     "3_star": 1000,
-    budget: 500,
+    budget: 0,
   };
 
   const MealPrices= {
-    breakfast: 500,
-    "half-board": 1000,
-    "full-board": 1500,
+    breakfast: 0,
+    "half-board": 500,
+    "full-board": 1000,
   }
 
   function parsePrice(priceString) {
