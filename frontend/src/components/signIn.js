@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const SignIn = ({ onClose }) => {
   const [email, setEmail] = useState("");
@@ -10,7 +11,7 @@ const SignIn = ({ onClose }) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://travel-agency-website-production-2b15.up.railway.app/signin", {
+      const res = await fetch(`${API_URL}/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

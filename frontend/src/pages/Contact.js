@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../css-modules/contact.module.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 function Contact() {
 
@@ -14,7 +15,7 @@ function Contact() {
     };
 
     try {
-      const res = await fetch("https://travel-agency-website-production-2b15.up.railway.app/contact", {
+      const res = await fetch(`${API_URL}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

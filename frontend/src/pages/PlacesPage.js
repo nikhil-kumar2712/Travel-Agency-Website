@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styles from "../css-modules/addplaces.module.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 function PlacePage() {
   const { placeName } = useParams();
@@ -8,7 +9,7 @@ function PlacePage() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`https://travel-agency-website-production-2b15.up.railway.app/places/${encodeURIComponent(placeName)}`)
+    fetch(`${API_URL}/places/${encodeURIComponent(placeName)}`)
       .then(res => res.json())
       .then(data => setPlaceData(data));
   }, [placeName]);
@@ -58,7 +59,7 @@ function PlacePage() {
         {placeData.images && placeData.images.length > 0 && (
         <div className={styles.slideshow}>
             <img
-            src={`https://travel-agency-website-production-2b15.up.railway.app/${placeData.images[currentIndex]}`} 
+            src={`${API_URL}/${placeData.images[currentIndex]}`} 
             alt={`${placeData.name} slideshow`}
             className={styles.slide_image}
             />

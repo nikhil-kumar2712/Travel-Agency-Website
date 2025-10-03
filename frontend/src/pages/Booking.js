@@ -1,5 +1,6 @@
 import { useEffect,useState } from "react";
 import styles from "../css-modules/booking.module.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 function Booking() {
   // 1️⃣ Define initial state once
@@ -31,7 +32,7 @@ function Booking() {
   const [selectedPackages, setSelectedPackages] = useState({});
 
   useEffect(() => {
-    fetch("https://travel-agency-website-production-2b15.up.railway.app/places-with-packages") // create a backend endpoint that returns places + their packages
+    fetch(`${API_URL}/places-with-packages`) // create a backend endpoint that returns places + their packages
       .then(res => res.json())
       .then(data => setAvailablePlaces(data))
       .catch(err => console.error(err));
@@ -194,7 +195,7 @@ function Booking() {
     };
 
     try {
-      const res = await fetch("https://travel-agency-website-production-2b15.up.railway.app/bookings", {
+      const res = await fetch(`${API_URL}/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),

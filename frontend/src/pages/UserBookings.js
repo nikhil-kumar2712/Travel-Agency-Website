@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "../css-modules/userbooking.module.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
@@ -15,7 +16,7 @@ function MyBookings() {
       return;
     }
 
-    fetch(`https://travel-agency-website-production-2b15.up.railway.app/bookings/${userId}`)
+    fetch(`${API_URL}/bookings/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         setBookings(data);

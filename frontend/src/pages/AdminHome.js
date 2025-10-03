@@ -4,6 +4,7 @@ import AdminHeader from "../components/adminheader";
 import styles from "../css-modules/adminhome.module.css";
 import bookingstyles from "../css-modules/userbooking.module.css";
 import placestyles from "../css-modules/addplaces.module.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 function AdminPanel() {
   const navigate = useNavigate();
@@ -28,14 +29,14 @@ function AdminPanel() {
   };
 
   useEffect(() => {
-    fetch("https://travel-agency-website-production-2b15.up.railway.app/places") // Adjust endpoint to return all places
+    fetch(`${API_URL}/places`) // Adjust endpoint to return all places
       .then(res => res.json())
       .then(data => setExistingPlaces(data))
       .catch(err => console.error("Error fetching existing places:", err));
   }, []);
 
   useEffect(() => {
-    fetch("https://travel-agency-website-production-2b15.up.railway.app/adminhome")
+    fetch(`${API_URL}/adminhome`)
       .then((res) => res.json())
       .then((data) => {
         setBookings(data);
@@ -117,7 +118,7 @@ function AdminPanel() {
     formData.append("inclusions", JSON.stringify(inclusions));
     formData.append("exclusions", JSON.stringify(exclusions));
 
-    await fetch("https://travel-agency-website-production-2b15.up.railway.app/places", {
+    await fetch(`${API_URL}/places`, {
       method: "POST",
       body: formData
     });
@@ -151,7 +152,7 @@ function AdminPanel() {
         }
       });
 
-      await fetch(`https://travel-agency-website-production-2b15.up.railway.app/places/${placeData.id}`,{
+      await fetch(`${API_URL}/places/${placeData.id}`,{
         method: "POST",
         body: formData
       });
@@ -365,7 +366,7 @@ function AdminPanel() {
                   return;
                 }
                 try {
-                  const res = await fetch(`https://travel-agency-website-production-2b15.up.railway.app/places/${encodeURIComponent(placename)}`);
+                  const res = await fetch(`${API_URL}/places/${encodeURIComponent(placename)}`);
                   const data = await res.json();
                   setPlaceData(data);
                 } catch (err) {
@@ -419,7 +420,7 @@ function AdminPanel() {
                     src={
                       placeData.images[currentIndex] instanceof File
                         ? URL.createObjectURL(placeData.images[currentIndex]) // ✅ preview for new file
-                        : `https://travel-agency-website-production-2b15.up.railway.app/${placeData.images[currentIndex]}` // ✅ already saved image
+                        : `${API_URL}/${placeData.images[currentIndex]}` // ✅ already saved image
                     }
                     alt={`slide-${currentIndex}`}
                     className={placestyles.slide_image}
