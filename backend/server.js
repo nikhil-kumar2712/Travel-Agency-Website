@@ -414,14 +414,14 @@ app.post("/contact", async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "nikhilkumar111076@gmail.com", // e.g. "nikhilkumar111076@gmail.com"
-        pass: "uzwv xitl apca xzhe",   
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,  
     },
   });
 
   // Compose the mail
   const mailOptions = {
-    from: "nikhilkumar111076@gmail.com",
+    from: process.env.EMAIL_USER,
     to: "nikhilkumar6778op@gmail.com",// recipient: your fixed email
     subject:"User Querries from Contact Form",
     text: `Name: ${firstname} ${lastname}\nEmail: ${email}\n\nMessage:\n${subject}`
