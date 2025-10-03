@@ -21,7 +21,7 @@ const SignUp = ({ onClose }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/signup", {
+      const res = await fetch("https://travel-agency-website-production-2b15.up.railway.app/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

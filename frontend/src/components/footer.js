@@ -10,13 +10,13 @@ function Footer() {
           <div className="bottom">
             <h3>Quick Links</h3>
             <Link to="/"><i className="fa fa-angle-right"></i> Home </Link>
-            <Link to="/Places"><i className="fa fa-angle-right"></i> Places </Link>
-            <Link to="/Booking"><i className="fa fa-angle-right"></i> Booking </Link>
+            <Link to="/places"><i className="fa fa-angle-right"></i> Places </Link>
+            <Link to="/booking"><i className="fa fa-angle-right"></i> Booking </Link>
           </div>
           <div className="bottom">
             <h3>External Links</h3>
-            <Link to="/About"><i className="fa fa-angle-right"></i> About Us </Link>
-            <Link to="/Contact"><i className="fa fa-angle-right"></i> Contact Us </Link>
+            <Link to="/about"><i className="fa fa-angle-right"></i> About Us </Link>
+            <Link to="/contact"><i className="fa fa-angle-right"></i> Contact Us </Link>
             <Link to="/"><i className="fa fa-angle-right"></i> Privacy policy </Link>
             <Link to="/"><i className="fa fa-angle-right"></i> Terms and Conditions </Link>
           </div>

@@ -28,14 +28,14 @@ function AdminPanel() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/places") // Adjust endpoint to return all places
+    fetch("https://travel-agency-website-production-2b15.up.railway.app/places") // Adjust endpoint to return all places
       .then(res => res.json())
       .then(data => setExistingPlaces(data))
       .catch(err => console.error("Error fetching existing places:", err));
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:5000/adminhome")
+    fetch("https://travel-agency-website-production-2b15.up.railway.app/adminhome")
       .then((res) => res.json())
       .then((data) => {
         setBookings(data);
@@ -117,7 +117,7 @@ function AdminPanel() {
     formData.append("inclusions", JSON.stringify(inclusions));
     formData.append("exclusions", JSON.stringify(exclusions));
 
-    await fetch("http://localhost:5000/places", {
+    await fetch("https://travel-agency-website-production-2b15.up.railway.app/places", {
       method: "POST",
       body: formData
     });
@@ -151,7 +151,7 @@ function AdminPanel() {
         }
       });
 
-      await fetch(`http://localhost:5000/places/${placeData.id}`,{
+      await fetch(`https://travel-agency-website-production-2b15.up.railway.app/places/${placeData.id}`,{
         method: "POST",
         body: formData
       });
@@ -365,7 +365,7 @@ function AdminPanel() {
                   return;
                 }
                 try {
-                  const res = await fetch(`http://localhost:5000/places/${encodeURIComponent(placename)}`);
+                  const res = await fetch(`https://travel-agency-website-production-2b15.up.railway.app/places/${encodeURIComponent(placename)}`);
                   const data = await res.json();
                   setPlaceData(data);
                 } catch (err) {
@@ -419,7 +419,7 @@ function AdminPanel() {
                     src={
                       placeData.images[currentIndex] instanceof File
                         ? URL.createObjectURL(placeData.images[currentIndex]) // ✅ preview for new file
-                        : `http://localhost:5000/${placeData.images[currentIndex]}` // ✅ already saved image
+                        : `https://travel-agency-website-production-2b15.up.railway.app/${placeData.images[currentIndex]}` // ✅ already saved image
                     }
                     alt={`slide-${currentIndex}`}
                     className={placestyles.slide_image}
