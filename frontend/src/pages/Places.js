@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../css-modules/places.module.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Places = () => {
   const [places, setPlaces] = useState([]);
 
   useEffect(() => {
-    fetch("https://travel-agency-website-production-2b15.up.railway.app/places")
+    fetch(`${API_URL}/places`)
       .then(res => res.json())
       .then(data => {
       setPlaces(data);

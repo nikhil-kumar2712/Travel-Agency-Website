@@ -1,4 +1,5 @@
 import { useState } from "react";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const SignUp = ({ onClose }) => {
   const [uname, setUname] = useState("");
@@ -21,7 +22,7 @@ const SignUp = ({ onClose }) => {
     }
 
     try {
-      const res = await fetch("https://travel-agency-website-production-2b15.up.railway.app/signup", {
+      const res = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
