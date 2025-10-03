@@ -15,7 +15,7 @@ function MyBookings() {
       return;
     }
 
-    fetch(`http://localhost:5000/bookings/${userId}`)
+    fetch(`https://travel-agency-website-production-2b15.up.railway.app/bookings/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         setBookings(data);

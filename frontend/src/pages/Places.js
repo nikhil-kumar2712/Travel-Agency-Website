@@ -6,7 +6,7 @@ const Places = () => {
   const [places, setPlaces] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/places")
+    fetch("https://travel-agency-website-production-2b15.up.railway.app/places")
       .then(res => res.json())
       .then(data => {
       setPlaces(data);

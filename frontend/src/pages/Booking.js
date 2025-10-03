@@ -31,7 +31,7 @@ function Booking() {
   const [selectedPackages, setSelectedPackages] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:5000/places-with-packages") // create a backend endpoint that returns places + their packages
+    fetch("https://travel-agency-website-production-2b15.up.railway.app/places-with-packages") // create a backend endpoint that returns places + their packages
       .then(res => res.json())
       .then(data => setAvailablePlaces(data))
       .catch(err => console.error(err));
@@ -194,7 +194,7 @@ function Booking() {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/bookings", {
+      const res = await fetch("https://travel-agency-website-production-2b15.up.railway.app/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),

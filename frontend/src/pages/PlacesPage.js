@@ -8,7 +8,7 @@ function PlacePage() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/places/${encodeURIComponent(placeName)}`)
+    fetch(`https://travel-agency-website-production-2b15.up.railway.app/places/${encodeURIComponent(placeName)}`)
       .then(res => res.json())
       .then(data => setPlaceData(data));
   }, [placeName]);
@@ -58,7 +58,7 @@ function PlacePage() {
         {placeData.images && placeData.images.length > 0 && (
         <div className={styles.slideshow}>
             <img
-            src={`http://localhost:5000/${placeData.images[currentIndex]}`} 
+            src={`https://travel-agency-website-production-2b15.up.railway.app/${placeData.images[currentIndex]}`} 
             alt={`${placeData.name} slideshow`}
             className={styles.slide_image}
             />
