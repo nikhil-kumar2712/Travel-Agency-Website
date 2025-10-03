@@ -416,14 +416,14 @@ app.post("/contact", async (req, res) => {
     port: 465,
     secure: true,
     auth: {
-        user: process.env.EMAIL_USER, // e.g. "nikhilkumar111076@gmail.com"
-        pass: process.env.EMAIL_PASS,   
+        user: "nikhilkumar111076@gmail.com", // e.g. "nikhilkumar111076@gmail.com"
+        pass: "uzwv xitl apca xzhe",   
     },
   });
 
   // Compose the mail
   const mailOptions = {
-    from: process.env.EMAIL_USER,                  // sender: the email entered in the form
+    from: "nikhilkumar111076@gmail.com",                  // sender: the email entered in the form
     to: "nikhilkumar6778op@gmail.com",// recipient: your fixed email
     subject:"User Querries from Contact Form",
     text: `Name: ${firstname} ${lastname}\nEmail: ${email}\n\nMessage:\n${subject}`,
