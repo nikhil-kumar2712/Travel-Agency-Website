@@ -45,7 +45,7 @@ const Places = () => {
         {Array.isArray(places) && places.map((place) => (
           <div className={styles.box} key={place.id}>
             <Link to={`/place/${toSlug(place.name)}`}>
-              <img src={place.image_url || "/assets/default.jpg"} alt={place.name} />
+              <img src={`${API_URL}/${place.image_url}` || "/assets/default.jpg"} alt={place.name} />
             </Link>
             <div id={styles.text}>
               <p>{place.name}</p>

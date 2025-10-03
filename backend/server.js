@@ -363,7 +363,7 @@ app.get("/places", (req, res) => {
     const places = results.map(row => ({
       id: row.id,
       name: row.name,
-      image_url: row.image_url ? `http://localhost:5000/${row.image_url}` : null
+      image_url: row.image_url 
     }));
 
     res.json(places);
