@@ -412,9 +412,7 @@ app.post("/contact", async (req, res) => {
 
   // Set up your transporter (SMTP details)
   const transporter = nodemailer.createTransport({
-    service: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    service: "gmail",
     auth: {
         user: "nikhilkumar111076@gmail.com", // e.g. "nikhilkumar111076@gmail.com"
         pass: "uzwv xitl apca xzhe",   
@@ -423,11 +421,10 @@ app.post("/contact", async (req, res) => {
 
   // Compose the mail
   const mailOptions = {
-    from: "nikhilkumar111076@gmail.com",                  // sender: the email entered in the form
+    from: "nikhilkumar111076@gmail.com",
     to: "nikhilkumar6778op@gmail.com",// recipient: your fixed email
     subject:"User Querries from Contact Form",
-    text: `Name: ${firstname} ${lastname}\nEmail: ${email}\n\nMessage:\n${subject}`,
-    replyTo: email
+    text: `Name: ${firstname} ${lastname}\nEmail: ${email}\n\nMessage:\n${subject}`
   };
 
   try {
