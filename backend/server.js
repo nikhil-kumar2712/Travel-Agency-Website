@@ -412,10 +412,12 @@ app.post("/contact", async (req, res) => {
 
   // Set up your transporter (SMTP details)
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: process.env.EMAIL_HOST,
+    port: Number(process.env.EMAIL_PORT),
+    secure: false, // true if port 465, false for 587
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,  
+      pass: process.env.EMAIL_PASS,
     },
   });
 
